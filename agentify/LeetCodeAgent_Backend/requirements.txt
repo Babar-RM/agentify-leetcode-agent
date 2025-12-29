@@ -1,0 +1,22 @@
+# Core Backend
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database
+psycopg2-binary==2.9.9
+
+# HTTP & APIs
+requests==2.31.0
+httpx==0.25.2
+
+# Email Service
+sib-api-v3-sdk==7.6.0
+
+# Scheduling
+schedule==1.2.0
+
+# Utilities
+python-dotenv==1.0.0

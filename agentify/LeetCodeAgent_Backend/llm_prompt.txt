@@ -1,0 +1,3678 @@
+Please analyze the following LeetCode solutions and organize them into a structured format suitable for database storage. For each solution, provide:
+
+1. Problem Number
+2. Problem Title
+3. Difficulty Level
+4. Programming Language
+5. Code Quality Assessment (1-10)
+6. Time Complexity
+7. Space Complexity
+8. Key Algorithms/Data Structures Used
+9. Code Explanation
+10. Potential Improvements
+
+Here are the solutions to analyze:
+
+
+--- Solution 1 ---
+File: 01-1768.ts
+Path: LeetCode-75/01-1768.ts
+Language: TypeScript
+Extracted Number: 01
+Extracted Title: 1768.Ts
+
+Code:
+// https://leetcode.com/problems/greatest-common-divisor-of-strings/description/?envType=study-plan-v2&envId=leetcode-75
+
+const isStrValid = (str: string, substrLen: number): boolean => {
+  const substrToCheck = str.substring(0, substrLen);
+  return !str.split(substrToCheck).filter((val) => !!val).length;
+};
+
+const gcdOfStrings = (str1: string, str2: string): string => {
+  const maxStrLen = str1.length < str2.length ? str1.length : str2.length;
+  let substrLen = maxStrLen;
+
+  while (substrLen > 0) {
+    if (
+      isStrValid(str1, substrLen) &&
+      isStrValid(str2, substrLen) &&
+      str1.startsWith(str2.substring(0, substrLen))
+    )
+      return str1.substring(0, substrLen);
+
+    substrLen--;
+  }
+
+  return "";
+};
+
+--------------------------------------------------
+
+--- Solution 2 ---
+File: 02-1071.ts
+Path: LeetCode-75/02-1071.ts
+Language: TypeScript
+Extracted Number: 02
+Extracted Title: 1071.Ts
+
+Code:
+// https://leetcode.com/problems/merge-strings-alternately/?envType=study-plan-v2&envId=leetcode-75
+
+const mergeAlternately = (word1: string, word2: string): string => {
+  const minLen = word1.length < word2.length ? word1.length : word2.length;
+
+  const word2Chars = word2.substring(0, minLen).split("");
+
+  return (
+    word1
+      .substring(0, minLen)
+      .split("")
+      .map((char, idx) => char + word2Chars[idx])
+      .join("") +
+    word1.substring(minLen) +
+    word2.substring(minLen)
+  );
+};
+
+--------------------------------------------------
+
+--- Solution 3 ---
+File: 03-1431.ts
+Path: LeetCode-75/03-1431.ts
+Language: TypeScript
+Extracted Number: 03
+Extracted Title: 1431.Ts
+
+Code:
+// https://leetcode.com/problems/kids-with-the-greatest-number-of-candies/?envType=study-plan-v2&envId=leetcode-75
+
+const kidsWithCandies = (
+  candies: number[],
+  extraCandies: number
+): boolean[] => {
+  const biggestCandiesCountOwned = candies.reduce(
+    (acc, val) => (val > acc ? val : acc),
+    0
+  );
+
+  return candies.map((el) => el + extraCandies >= biggestCandiesCountOwned);
+};
+
+--------------------------------------------------
+
+--- Solution 4 ---
+File: 04-605.ts
+Path: LeetCode-75/04-605.ts
+Language: TypeScript
+Extracted Number: 04
+Extracted Title: 605.Ts
+
+Code:
+// https://leetcode.com/problems/can-place-flowers/description/?envType=study-plan-v2&envId=leetcode-75
+
+const canPlaceFlowers = (flowerbed: number[], n: number): boolean => {
+  let remaining = n,
+    idx = 0;
+
+  while (remaining && idx < flowerbed.length) {
+    if (
+      !flowerbed[idx] &&
+      ((idx === 0 && !flowerbed[idx + 1]) ||
+        (idx === flowerbed.length - 1 && !flowerbed[idx - 1]) ||
+        (!flowerbed[idx - 1] && !flowerbed[idx + 1]))
+    ) {
+      flowerbed[idx] = 1;
+      remaining--;
+    }
+
+    idx++;
+  }
+
+  return !remaining;
+};
+
+--------------------------------------------------
+
+--- Solution 5 ---
+File: 05-345.ts
+Path: LeetCode-75/05-345.ts
+Language: TypeScript
+Extracted Number: 05
+Extracted Title: 345.Ts
+
+Code:
+// https://leetcode.com/problems/reverse-vowels-of-a-string/?envType=study-plan-v2&envId=leetcode-75
+
+const VOWELS = ["a", "e", "i", "o", "u"];
+
+const reverseVowels = (str: string): string => {
+  const savedVowels: string[] = [];
+  const savedIdxs: number[] = [];
+  const newStrArr = str.split("");
+  str = str.toLowerCase();
+
+  for (let i = 0; i <= str.length; i++)
+    if (VOWELS.includes(str[i])) {
+      savedIdxs.push(i);
+      savedVowels.push(newStrArr[i]);
+    }
+
+  savedIdxs.forEach(
+    (vowelIdx, idx) =>
+      (newStrArr[vowelIdx] = savedVowels[savedIdxs.length - idx - 1])
+  );
+
+  return newStrArr.join("");
+};
+
+--------------------------------------------------
+
+--- Solution 6 ---
+File: 06-151.ts
+Path: LeetCode-75/06-151.ts
+Language: TypeScript
+Extracted Number: 06
+Extracted Title: 151.Ts
+
+Code:
+// https://leetcode.com/problems/reverse-words-in-a-string/description/?envType=study-plan-v2&envId=leetcode-75
+
+const reverseWords = (str: string): string =>
+  str
+    .match(/[^\s]+/g)
+    ?.reverse()
+    .join(" ") || "";
+
+--------------------------------------------------
+
+--- Solution 7 ---
+File: 07-238.ts
+Path: LeetCode-75/07-238.ts
+Language: TypeScript
+Extracted Number: 07
+Extracted Title: 238.Ts
+
+Code:
+// https://leetcode.com/problems/product-of-array-except-self/description/?envType=study-plan-v2&envId=leetcode-75
+
+const productExceptSelf = (nums: number[]): number[] => {
+  // O(N^2) SOLUTION
+  // return nums.map((_el, outerIdx) =>
+  //   nums.reduce((acc, val, idx) => (idx === outerIdx ? acc : acc * val), 1)
+  // );
+
+  // O(N) SOLUTION
+  const prefixes = new Array(nums.length).fill(1);
+  const postfixes = new Array(nums.length).fill(1);
+
+  for (let i = 0, prefix = 1; i < nums.length; i++) {
+    prefix *= nums[i];
+    prefixes[i] = prefix;
+  }
+
+  for (let i = nums.length - 1, postfix = 1; i >= 0; i--) {
+    postfix *= nums[i];
+    postfixes[i] = postfix;
+  }
+
+  return nums.map((_el, i) => (prefixes[i - 1] ?? 1) * (postfixes[i + 1] ?? 1));
+};
+
+--------------------------------------------------
+
+--- Solution 8 ---
+File: 08-334.ts
+Path: LeetCode-75/08-334.ts
+Language: TypeScript
+Extracted Number: 08
+Extracted Title: 334.Ts
+
+Code:
+// https://leetcode.com/problems/increasing-triplet-subsequence/?envType=study-plan-v2&envId=leetcode-75
+
+const increasingTriplet = (nums: number[]): boolean => {
+  // O(N^3) SOLUTION
+  // if (nums.length < 3) return false;
+
+  // for (let i = 0; i < nums.length - 2; i++)
+  //   for (let j = i + 1; j < nums.length - 1; j++)
+  //     if (nums[j] > nums[i])
+  //       for (let k = j + 1; k < nums.length; k++)
+  //         if (nums[k] > nums[j]) return true;
+
+  // return false;
+
+  // O(N) SOLUTION
+  for (
+    let i = 0, firstMin = Number.MAX_VALUE, secondMin = Number.MAX_VALUE;
+    i < nums.length;
+    i++
+  ) {
+    if (nums[i] <= firstMin) firstMin = nums[i];
+    else if (nums[i] <= secondMin) secondMin = nums[i];
+    else return true;
+  }
+
+  return false;
+};
+
+--------------------------------------------------
+
+--- Solution 9 ---
+File: 09-443.ts
+Path: LeetCode-75/09-443.ts
+Language: TypeScript
+Extracted Number: 09
+Extracted Title: 443.Ts
+
+Code:
+// https://leetcode.com/problems/string-compression/?envType=study-plan-v2&envId=leetcode-75
+
+const compress = (chars: string[]): number => {
+  if (!chars.length) return 0;
+
+  let compressed = "",
+    currChar = chars[0],
+    currCharCount = 1;
+
+  for (let i = 1; i < chars.length; i++) {
+    if (chars[i] === currChar) currCharCount++;
+    else {
+      compressed =
+        compressed + currChar + (currCharCount === 1 ? "" : currCharCount);
+      currChar = chars[i];
+      currCharCount = 1;
+    }
+  }
+
+  compressed =
+    compressed + currChar + (currCharCount === 1 ? "" : currCharCount);
+
+  for (let i = 0; i < compressed.length; i++) chars[i] = compressed[i];
+
+  return compressed.length;
+};
+
+--------------------------------------------------
+
+--- Solution 10 ---
+File: 10-283.ts
+Path: LeetCode-75/10-283.ts
+Language: TypeScript
+Extracted Number: 10
+Extracted Title: 283.Ts
+
+Code:
+// https://leetcode.com/problems/move-zeroes/description/?envType=study-plan-v2&envId=leetcode-75
+
+const moveZeroes = (nums: number[]): void => {
+  for (let i = 0, nonZerosCount = nums.length; i < nonZerosCount; )
+    if (nums[i] === 0) {
+      nonZerosCount--;
+
+      for (let j = i; j < nonZerosCount; j++) nums[j] = nums[j + 1];
+
+      nums[nonZerosCount] = 0;
+    } else i++;
+};
+
+--------------------------------------------------
+
+--- Solution 11 ---
+File: 11-392.ts
+Path: LeetCode-75/11-392.ts
+Language: TypeScript
+Extracted Number: 11
+Extracted Title: 392.Ts
+
+Code:
+// https://leetcode.com/problems/is-subsequence/?source=submission-noac
+
+const isSubsequence = (s: string, t: string): boolean => {
+  for (let i = 0, tStartIdx = 0; i < s.length; i++) {
+    const prevTStartIdx = tStartIdx;
+    tStartIdx = t.substring(tStartIdx).indexOf(s[i]);
+    if (tStartIdx === -1) return false;
+    tStartIdx += prevTStartIdx + 1;
+  }
+
+  return true;
+};
+
+--------------------------------------------------
+
+--- Solution 12 ---
+File: 12-11.ts
+Path: LeetCode-75/12-11.ts
+Language: TypeScript
+Extracted Number: 12
+Extracted Title: 11.Ts
+
+Code:
+// https://leetcode.com/problems/container-with-most-water/?envType=study-plan-v2&envId=leetcode-75
+
+const maxArea = (h: number[]): number => {
+  let max = 0;
+
+  // O(N^2) SOLUTION
+  // for (let i = 0; i < h.length; i++) {
+  //     for (let j = 0; j < h.length; j++) {
+  //         if (i === j) continue;
+  //         const temp = Math.min(h[i], h[j]) * Math.abs(i - j)
+  //         if (temp > max) max = temp;
+  //     }
+  // }
+
+  // O(N^2) SOLUTION, SLIGHTLY BETTER
+  // for (let i = 0; i < h.length; i++) {
+  //     for (let j = i + 1; j < h.length; j++) {
+  //         if (i === j) continue;
+  //         const temp = Math.min(h[i], h[j]) * (j - i)
+  //         if (temp > max) max = temp;
+  //     }
+  // }
+
+  // O(N) SOLUTION
+  let i = 0,
+    j = h.length - 1;
+
+  while (i < j) {
+    const temp = Math.min(h[i], h[j]) * (j - i);
+    if (temp > max) max = temp;
+
+    if (h[i] > h[j]) j--;
+    else i++;
+  }
+
+  return max;
+};
+
+--------------------------------------------------
+
+--- Solution 13 ---
+File: 13-1679.ts
+Path: LeetCode-75/13-1679.ts
+Language: TypeScript
+Extracted Number: 13
+Extracted Title: 1679.Ts
+
+Code:
+// https://leetcode.com/problems/max-number-of-k-sum-pairs/?envType=study-plan-v2&envId=leetcode-75
+
+type NumsObjType = {
+  [key: number]: {
+    pairedNb: number;
+    count: number;
+  };
+};
+
+const maxOperations = (nums: number[], k: number): number => {
+  let pairs = 0;
+
+  // O(N^2) SOLUTION
+  // for (let i = 0; i < nums.length - 1; i++) {
+  //     const target = k - nums[i];
+
+  //     for (let j = i + 1; j < nums.length; j++)
+  //         if (nums[j] === target) {
+  //             pairs++;
+  //             nums.splice(j, 1);
+  //             nums.splice(i, 1);
+  //             i--; // NOSONAR
+  //             break;
+  //         }
+  // }
+
+  // O(N) SOLUTION
+  const numsObj: NumsObjType = {};
+
+  for (const num of nums)
+    if (numsObj[num]) numsObj[num].count++;
+    else numsObj[num] = { pairedNb: k - num, count: 1 };
+
+  for (const [, v] of Object.entries(numsObj)) {
+    const firstPairCount = v.count;
+    const secondPairCount = numsObj[v.pairedNb]?.count;
+
+    if (firstPairCount && secondPairCount)
+      pairs += Math.min(v.count, numsObj[v.pairedNb].count);
+  }
+
+  pairs = Math.floor(pairs / 2);
+  // SIMILAR TO: pairs DIV 2
+  // USED TO HANDLE THE CASE OF k % 2 === 0 && k % 2 !== 0
+
+  return pairs;
+};
+
+--------------------------------------------------
+
+--- Solution 14 ---
+File: 14-643.ts
+Path: LeetCode-75/14-643.ts
+Language: TypeScript
+Extracted Number: 14
+Extracted Title: 643.Ts
+
+Code:
+// https://leetcode.com/problems/maximum-average-subarray-i/submissions/1117627761/?envType=study-plan-v2&envId=leetcode-75
+
+const findMaxAverage = (nums: number[], k: number): number => {
+  if (nums.length < k) return 0;
+
+  let maxSum = 0;
+
+  // O(N) SOLUTION
+  for (let i = 0; i < k; i++) maxSum += nums[i];
+
+  for (let i = 1, tempSum = maxSum; i <= nums.length - k; i++) {
+    tempSum -= nums[i - 1] + nums[i - 1 + k];
+    if (tempSum > maxSum) maxSum = tempSum;
+  }
+
+  return Number((maxSum / k).toFixed(5));
+};
+
+--------------------------------------------------
+
+--- Solution 15 ---
+File: 15-1456.ts
+Path: LeetCode-75/15-1456.ts
+Language: TypeScript
+Extracted Number: 15
+Extracted Title: 1456.Ts
+
+Code:
+// https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/description/?envType=study-plan-v2&envId=leetcode-75
+
+const VOWEL_LETTERS = ["a", "e", "i", "o", "u"];
+
+const maxVowels = (s: string, k: number): number => {
+  if (s.length < k) return 0;
+
+  let max = 0;
+
+  // O(N) SOLUTION
+  for (let i = 0; i < k; i++) if (VOWEL_LETTERS.includes(s[i])) max++;
+
+  for (let i = 1, temp = max; i <= s.length - k; i++) {
+    if (VOWEL_LETTERS.includes(s[i - 1])) temp--;
+    if (VOWEL_LETTERS.includes(s[i - 1 + k])) temp++;
+    if (temp > max) max = temp;
+  }
+
+  return max;
+};
+
+--------------------------------------------------
+
+--- Solution 16 ---
+File: 16-1004.ts
+Path: LeetCode-75/16-1004.ts
+Language: TypeScript
+Extracted Number: 16
+Extracted Title: 1004.Ts
+
+Code:
+// https://leetcode.com/problems/max-consecutive-ones-iii/description/?envType=study-plan-v2&envId=leetcode-75
+
+const longestOnes = (nums: number[], k: number): number => {
+  // NOSONAR
+  if (nums.length <= k) return nums.length;
+
+  let firstIdx = 0,
+    lastIdx = 0,
+    flippedZerosCount = 0,
+    longest = 0;
+
+  // O(N) SOLUTION
+  while (flippedZerosCount !== k && lastIdx < nums.length) {
+    if (!nums[lastIdx]) flippedZerosCount++;
+    lastIdx++;
+  }
+
+  // lastIdx IS AT: LAST SUBARRAY IDX + 1
+
+  // USE lastIdx AND firstIdx TO CALCULATE SUBARRAY LENGTH
+  longest = lastIdx - firstIdx;
+
+  while (lastIdx < nums.length) {
+    if (!nums[lastIdx]) {
+      if (!nums[firstIdx]) flippedZerosCount++;
+      flippedZerosCount--;
+      firstIdx++;
+    } else if (flippedZerosCount !== k) {
+      if (nums[firstIdx]) flippedZerosCount--;
+      flippedZerosCount++;
+      firstIdx++;
+    } else {
+      const tempLongest = lastIdx - firstIdx + 1;
+      if (tempLongest > longest) longest = tempLongest;
+    }
+
+    lastIdx++;
+  }
+
+  return longest;
+};
+
+--------------------------------------------------
+
+--- Solution 17 ---
+File: 17-1493.ts
+Path: LeetCode-75/17-1493.ts
+Language: TypeScript
+Extracted Number: 17
+Extracted Title: 1493.Ts
+
+Code:
+// https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/?envType=study-plan-v2&envId=leetcode-75
+
+const longestSubarray = (nums: number[]): number => {
+  // IF YOU ENCOUTER A ZERO, SAVE ITS IDX AND CONTINUE
+  // IF YOU ENCOUTER ANOTHER ZERO, MOVE FIRST IDX TO LAST ZERO IDX + 1
+  // EACH TIME CALCULATE THE LONGEST
+  // IF YOU'VE NEVER ENCOUTERED A ZERO, RETURN num.length - 1
+
+  let firstIdx = 0,
+    lastIdx = 0,
+    longest = 0,
+    lastZeroIdx = -1;
+
+  // O(N) SOLUTION
+  while (lastIdx < nums.length) {
+    if (nums[lastIdx]) {
+      const tempLongest = lastIdx - firstIdx + (lastZeroIdx === -1 ? 1 : 0);
+      if (tempLongest > longest) longest = tempLongest;
+    } else if (lastZeroIdx === -1) {
+      lastZeroIdx = lastIdx;
+    } else {
+      firstIdx = lastZeroIdx + 1;
+      lastZeroIdx = lastIdx;
+    }
+
+    lastIdx++;
+  }
+
+  if (lastZeroIdx === -1) longest--;
+
+  return longest;
+};
+
+--------------------------------------------------
+
+--- Solution 18 ---
+File: 18-1732.ts
+Path: LeetCode-75/18-1732.ts
+Language: TypeScript
+Extracted Number: 18
+Extracted Title: 1732.Ts
+
+Code:
+// https://leetcode.com/problems/find-the-highest-altitude/description/?envType=study-plan-v2&envId=leetcode-75
+
+const largestAltitude = (gain: number[]): number => {
+  let highest = 0,
+    sum = 0;
+
+  // O(N) SOLUTION
+  for (let val of gain) {
+    sum += val;
+    if (sum > highest) highest = sum;
+  }
+
+  return highest;
+};
+
+--------------------------------------------------
+
+--- Solution 19 ---
+File: 19-724.ts
+Path: LeetCode-75/19-724.ts
+Language: TypeScript
+Extracted Number: 19
+Extracted Title: 724.Ts
+
+Code:
+// https://leetcode.com/problems/find-pivot-index/description/?envType=study-plan-v2&envId=leetcode-75
+
+const pivotIndex = (nums: number[]): number => {
+  // O(N) SOLUTION, BUT UNACCEPTED; IT DOESN'T WORK PROPERLY WITH POSITIVE/NEGATIVE VALUES
+  // let i = 0,
+  //   j = nums.length - 1,
+  //   leftSum = 0,
+  //   rightSum = 0;
+
+  // while (i < j) {
+  //   const nextLeftSum = leftSum + nums[i];
+  //   const nextRightSum = rightSum + nums[j];
+
+  //   if (nextLeftSum > nextRightSum) {
+  //     // if (Math.abs(nextLeftSum) > Math.abs(nextRightSum)) {
+  //     rightSum = nextRightSum;
+  //     j--;
+  //   } else {
+  //     leftSum = nextLeftSum;
+  //     i++;
+  //   }
+  // }
+
+  // return rightSum === leftSum ? i : -1;
+
+  // O(N) SOLUTION
+  let i = 1,
+    leftSum = 0,
+    rightSum = nums.reduce((acc, val) => acc + val, 0) - nums[0];
+
+  while (i < nums.length && leftSum !== rightSum) {
+    leftSum += nums[i - 1];
+    rightSum -= nums[i];
+    i++;
+  }
+
+  return leftSum === rightSum ? i - 1 : -1;
+};
+
+--------------------------------------------------
+
+--- Solution 20 ---
+File: 20-2215.ts
+Path: LeetCode-75/20-2215.ts
+Language: TypeScript
+Extracted Number: 20
+Extracted Title: 2215.Ts
+
+Code:
+// https://leetcode.com/problems/find-the-difference-of-two-arrays/?envType=study-plan-v2&envId=leetcode-75
+
+const findDifference = (nums1: number[], nums2: number[]): number[][] => {
+  const nums1Set = new Set(nums1),
+    nums2Set = new Set(nums2);
+
+  return [
+    [...nums1Set].filter((val) => !nums2Set.has(val)),
+    [...nums2Set].filter((val) => !nums1Set.has(val)),
+  ];
+};
+
+--------------------------------------------------
+
+--- Solution 21 ---
+File: 21-1207.ts
+Path: LeetCode-75/21-1207.ts
+Language: TypeScript
+Extracted Number: 21
+Extracted Title: 1207.Ts
+
+Code:
+// https://leetcode.com/problems/unique-number-of-occurrences/?envType=study-plan-v2&envId=leetcode-75
+
+const uniqueOccurrences = (arr) => {
+  const occurenceCountPerNb = new Map();
+
+  for (const val of arr) {
+    if (!occurenceCountPerNb.has(val)) occurenceCountPerNb.set(val, 1);
+    else occurenceCountPerNb.set(val, occurenceCountPerNb.get(val) + 1);
+  }
+
+  const occurenceCountArr = Array.from(occurenceCountPerNb.values());
+
+  return new Set(occurenceCountArr).size === occurenceCountArr.length;
+};
+
+--------------------------------------------------
+
+--- Solution 22 ---
+File: 22-1657.ts
+Path: LeetCode-75/22-1657.ts
+Language: TypeScript
+Extracted Number: 22
+Extracted Title: 1657.Ts
+
+Code:
+// https://leetcode.com/problems/determine-if-two-strings-are-close/description/?envType=study-plan-v2&envId=leetcode-75
+
+const closeStrings = (word1: string, word2: string): boolean => {
+  if (word1.length !== word2.length) return false;
+
+  const word1LettersFrequency = new Map(),
+    word2LettersFrequency = new Map();
+
+  // O(N) SOLUTION
+  for (let i = 0; i < word1.length; i++) {
+    word1LettersFrequency.set(
+      word1[i],
+      word1LettersFrequency.has(word1[i])
+        ? word1LettersFrequency.get(word1[i]) + 1
+        : 1
+    );
+
+    word2LettersFrequency.set(
+      word2[i],
+      word2LettersFrequency.has(word2[i])
+        ? word2LettersFrequency.get(word2[i]) + 1
+        : 1
+    );
+  }
+
+  const word1Arr = [
+      ...word1LettersFrequency.keys(),
+      ...word1LettersFrequency.values(),
+    ].sort(), // NOSONAR
+    word2Arr = [
+      ...word2LettersFrequency.keys(),
+      ...word2LettersFrequency.values(),
+    ].sort(); // NOSONAR
+
+  return word1Arr.join("") === word2Arr.join("");
+};
+
+--------------------------------------------------
+
+--- Solution 23 ---
+File: 23-2352.ts
+Path: LeetCode-75/23-2352.ts
+Language: TypeScript
+Extracted Number: 23
+Extracted Title: 2352.Ts
+
+Code:
+// https://leetcode.com/problems/equal-row-and-column-pairs/?envType=study-plan-v2&envId=leetcode-75
+
+const equalPairs = (grid: number[][]): number => {
+  if (!grid.length || !grid[0].length) return 0;
+
+  const colsMap = new Map();
+
+  for (let i = 0; i < grid.length; i++) {
+    let colStr = "";
+    for (const row of grid) colStr += row[i] + ",";
+    colStr = colStr.substring(0, colStr.length - 1);
+
+    colsMap.set(colStr, colsMap.has(colStr) ? colsMap.get(colStr) + 1 : 1);
+  }
+
+  let pairsCount = 0;
+
+  for (let row of grid) {
+    const rowStr = row.join(",");
+    if (colsMap.has(rowStr)) pairsCount += colsMap.get(rowStr);
+  }
+
+  return pairsCount;
+};
+
+--------------------------------------------------
+
+--- Solution 24 ---
+File: 24-2390.ts
+Path: LeetCode-75/24-2390.ts
+Language: TypeScript
+Extracted Number: 24
+Extracted Title: 2390.Ts
+
+Code:
+// https://leetcode.com/problems/removing-stars-from-a-string/description/?envType=study-plan-v2&envId=leetcode-75
+
+const removeStars = (s: string): string => {
+  const arr: string[] = [];
+
+  for (const c of s)
+    if (c === "*") arr.pop();
+    else arr.push(c);
+
+  return arr.join("");
+};
+
+--------------------------------------------------
+
+--- Solution 25 ---
+File: 25-731.ts
+Path: LeetCode-75/25-731.ts
+Language: TypeScript
+Extracted Number: 25
+Extracted Title: 731.Ts
+
+Code:
+// https://leetcode.com/problems/asteroid-collision/?envType=study-plan-v2&envId=leetcode-75
+
+const asteroidCollision = (asteroids: number[]): number[] => {
+  if (asteroids.length < 2) return asteroids;
+
+  const survivingAsteroids = [asteroids[0]];
+  let i = 1;
+
+  while (i < asteroids.length) {
+    const prev = survivingAsteroids[survivingAsteroids.length - 1];
+    const curr = asteroids[i];
+
+    if (prev >= 0 && curr < 0) {
+      const currAbsVal = Math.abs(curr);
+
+      if (prev < currAbsVal) {
+        survivingAsteroids.pop();
+        continue;
+      }
+
+      if (prev === currAbsVal) survivingAsteroids.pop();
+    } else survivingAsteroids.push(curr);
+
+    i++;
+  }
+
+  return survivingAsteroids;
+};
+
+--------------------------------------------------
+
+--- Solution 26 ---
+File: 26-394.ts
+Path: LeetCode-75/26-394.ts
+Language: TypeScript
+Extracted Number: 26
+Extracted Title: 394.Ts
+
+Code:
+// https://leetcode.com/problems/decode-string/?envType=study-plan-v2&envId=leetcode-75
+
+const decodeString = (str: string): string => {
+  // ===/ CASE OF: ""
+  if (!str) return "";
+
+  const openingBracketIdx = str.indexOf("[");
+
+  // ===/ CASE OF: "ef"
+  if (openingBracketIdx === -1) return str;
+
+  const firstDigitIdx = RegExp(/\d/).exec(str)?.index ?? -1;
+
+  const count = +str.substr(0, openingBracketIdx);
+
+  // ===/ CASE OF: "ef3[a]..."
+  if (isNaN(count)) {
+    const currStr = str.substr(0, firstDigitIdx);
+    const remainingStr = str.substr(firstDigitIdx);
+    return currStr + decodeString(remainingStr);
+  }
+
+  // ===/ CASE OF: "3[a]..."
+  let closingBracketIdx = -1;
+
+  for (
+    let i = openingBracketIdx, closingBracketsToSkipCount = 0;
+    i < str.length;
+    i++
+  ) {
+    if (str[i] === "[") closingBracketsToSkipCount++;
+    else if (str[i] === "]") {
+      closingBracketsToSkipCount--;
+
+      if (!closingBracketsToSkipCount) {
+        closingBracketIdx = i;
+        break;
+      }
+    }
+  }
+
+  const nestedStr = str.substring(openingBracketIdx + 1, closingBracketIdx);
+  const remainingStr = str.substr(closingBracketIdx + 1);
+  const decodedStr = decodeString(nestedStr);
+
+  let resStr = "";
+  for (let i = 0; i < count; i++) resStr += decodedStr;
+
+  return resStr + decodeString(remainingStr);
+};
+
+--------------------------------------------------
+
+--- Solution 27 ---
+File: 27-933.ts
+Path: LeetCode-75/27-933.ts
+Language: TypeScript
+Extracted Number: 27
+Extracted Title: 933.Ts
+
+Code:
+// https://leetcode.com/problems/number-of-recent-calls/description/?envType=study-plan-v2&envId=leetcode-75
+
+class RecentCounter {
+  requests: number[];
+
+  constructor() {
+    this.requests = [];
+  }
+
+  ping(t: number): number {
+    this.requests.push(t);
+
+    const lowerRangeBoundary = t - 3000;
+    let requestCount = 0;
+
+    for (const val of this.requests) {
+      if (val < lowerRangeBoundary) break;
+      requestCount++;
+    }
+
+    return requestCount;
+  }
+}
+
+const recentCounter = new RecentCounter();
+
+console.log(recentCounter.ping(1));
+// requests = [1], range is [-2999, 1], return 1
+
+console.log(recentCounter.ping(100));
+// requests = [1, 100], range is [-2900, 100], return 2
+
+console.log(recentCounter.ping(3001));
+// requests = [1, 100, 3001], range is [1, 3001], return 3
+
+console.log(recentCounter.ping(3002));
+// requests = [1, 100, 3001, 3002], range is [2, 3002], return 3
+
+--------------------------------------------------
+
+--- Solution 28 ---
+File: 28-649.ts
+Path: LeetCode-75/28-649.ts
+Language: TypeScript
+Extracted Number: 28
+Extracted Title: 649.Ts
+
+Code:
+// https://leetcode.com/problems/dota2-senate/?envType=study-plan-v2&envId=leetcode-75
+
+const predictPartyVictory = (senate: string): string => {
+  // WRONG SOLUTION, 78/82 TEST CASES ONLY HAS PASSED
+  // let radiantCount = 0,
+  //   direCount = 0;
+
+  // for (const currSenator of senate)
+  //   if (currSenator === "R") radiantCount++;
+  //   else direCount++;
+
+  // let bannedRadiantCount = 0,
+  //   bannedDireCount = 0,
+  //   radiantHelperCount = radiantCount,
+  //   direHelperCount = direCount,
+  //   notBannedSenate = "";
+
+  // for (const currSenator of senate) {
+  //   if (currSenator === "R")
+  //     if (radiantHelperCount === radiantCount) {
+  //       direHelperCount--;
+  //       bannedDireCount++;
+  //       notBannedSenate += currSenator;
+  //     } else radiantHelperCount++;
+  //   else if (direHelperCount === direCount) {
+  //     radiantHelperCount--;
+  //     bannedRadiantCount++;
+  //     notBannedSenate += currSenator;
+  //   } else direHelperCount++;
+  // }
+
+  // const radiantCountAllowedToVote = radiantCount - bannedRadiantCount,
+  //   direCountAllowedToVote = direCount - bannedDireCount;
+
+  // if (radiantCountAllowedToVote > direCountAllowedToVote) return "Radiant";
+  // if (direCountAllowedToVote > radiantCountAllowedToVote) return "Dire";
+  // return predictPartyVictory(notBannedSenate)
+
+  const radiantQueue = [];
+  const direQueue = [];
+
+  for (let i = 0; i < senate.length; i++)
+    if (senate[i] === "R") radiantQueue.push(i);
+    else direQueue.push(i);
+
+  while (radiantQueue.length > 0 && direQueue.length > 0)
+    if (radiantQueue[0] > direQueue[0]) {
+      radiantQueue.shift();
+      // @ts-ignore
+      direQueue.push(direQueue.shift() + senate.length);
+    } else {
+      direQueue.shift();
+      // @ts-ignore
+      radiantQueue.push(radiantQueue.shift() + senate.length);
+    }
+
+  return radiantQueue.length === 0 ? "Dire" : "Radiant";
+};
+
+console.log(predictPartyVictory("RD")); // Radiant
+console.log(predictPartyVictory("RDD")); // Dire
+console.log(predictPartyVictory("DDRRR")); // Dire
+console.log(predictPartyVictory("RRDDD")); // Radiant
+console.log(predictPartyVictory("DRRDRDRDRDDRDRDR")); // Radiant
+console.log(predictPartyVictory("RRDRDDRDRRDDDDDRDRDR")); // Radiant
+
+// Input: senate = "RD"
+// Output: "Radiant"
+// Explanation:
+// The first senator comes from Radiant and he can just ban the next senator's right in round 1.
+// And the second senator can't exercise any rights anymore since his right has been banned.
+// And in round 2, the first senator can just announce the victory since he is the only guy in the senate who can vote.
+
+// Input: senate = "RDD"
+// Output: "Dire"
+// Explanation:
+// The first senator comes from Radiant and he can just ban the next senator's right in round 1.
+// And the second senator can't exercise any rights anymore since his right has been banned.
+// And the third senator comes from Dire and he can ban the first senator's right in round 1.
+// And in round 2, the third senator can just announce the victory since he is the only guy in the senate who can vote.
+
+--------------------------------------------------
+
+--- Solution 29 ---
+File: 29-2095.ts
+Path: LeetCode-75/29-2095.ts
+Language: TypeScript
+Extracted Number: 29
+Extracted Title: 2095.Ts
+
+Code:
+// https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const deleteMiddle = (head: ListNode | null): ListNode | null => {
+  let tempHead = head,
+    size = 0;
+
+  while (tempHead) {
+    tempHead = tempHead.next;
+    size++;
+  }
+
+  const middleNodeIdx = Math.floor(size / 2);
+
+  if (middleNodeIdx === 0) return head?.next ?? null;
+
+  let i = 1,
+    prev = head,
+    curr = head?.next ?? null;
+
+  while (i !== middleNodeIdx && curr) {
+    prev = curr;
+    curr = curr?.next ?? null;
+    i++;
+  }
+
+  prev.next = curr?.next ?? null;
+  return head;
+};
+
+--------------------------------------------------
+
+--- Solution 30 ---
+File: 30-328.ts
+Path: LeetCode-75/30-328.ts
+Language: TypeScript
+Extracted Number: 30
+Extracted Title: 328.Ts
+
+Code:
+// https://leetcode.com/problems/odd-even-linked-list/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const oddEvenList = (head: ListNode | null): ListNode | null => {
+  let i = 0, oddHead = null, tempOddHead = null, evenHead = null, tempEvenHead = null;
+  
+  while (head) {
+    if (i % 2) {
+      if (oddHead) {
+        tempOddHead.next = new ListNode(head.val);
+        tempOddHead = tempOddHead.next;
+      } else {
+        oddHead = new ListNode(head.val);
+        tempOddHead = oddHead;
+      };
+    } else {
+      if (evenHead) {
+        tempEvenHead.next = new ListNode(head.val);
+        tempEvenHead = tempEvenHead.next;
+      } else {
+        evenHead = new ListNode(head.val);
+        tempEvenHead = evenHead;
+      };
+    }
+    
+    head = head.next;
+    i++;
+  }
+
+  if (evenHead) {
+    tempEvenHead.next = oddHead;
+    return evenHead;
+  }
+
+  return oddHead;
+};
+
+--------------------------------------------------
+
+--- Solution 31 ---
+File: 31-206.ts
+Path: LeetCode-75/31-206.ts
+Language: TypeScript
+Extracted Number: 31
+Extracted Title: 206.Ts
+
+Code:
+// https://leetcode.com/problems/reverse-linked-list/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const reverseList = (head: ListNode | null): ListNode | null => {
+  let resHead = null;
+
+  while (head) {
+    resHead = new ListNode(head.val, resHead);
+    head = head.next;
+  }  
+  
+  return resHead;
+};
+
+--------------------------------------------------
+
+--- Solution 32 ---
+File: 32-2130.ts
+Path: LeetCode-75/32-2130.ts
+Language: TypeScript
+Extracted Number: 32
+Extracted Title: 2130.Ts
+
+Code:
+// https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const pairSum = (head: ListNode | null): number => {
+  const arr = [];
+
+  while (head) {
+    arr.push(head.val);
+    head = head.next;
+  }
+
+  const halfSize = arr.length / 2;
+  let max = 0;
+
+  for (let i = 0; i < halfSize; i++)
+    max = Math.max(max, arr[i] + arr[arr.length - 1 - i])
+
+  return max;
+};
+
+--------------------------------------------------
+
+--- Solution 33 ---
+File: 33-104.ts
+Path: LeetCode-75/33-104.ts
+Language: TypeScript
+Extracted Number: 33
+Extracted Title: 104.Ts
+
+Code:
+// https://leetcode.com/problems/maximum-depth-of-binary-tree/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const depthFirstMaxDepth = (root: TreeNode | null, depth: number): number => {
+  if (root === null) return depth;
+
+  const leftDepth = depthFirstMaxDepth(root.left, depth + 1);
+  const rightDepth = depthFirstMaxDepth(root.right, depth + 1);
+  return Math.max(leftDepth, rightDepth);
+};
+
+const maxDepth = (root: TreeNode | null): number => depthFirstMaxDepth(root, 0);
+
+--------------------------------------------------
+
+--- Solution 34 ---
+File: 34-872.ts
+Path: LeetCode-75/34-872.ts
+Language: TypeScript
+Extracted Number: 34
+Extracted Title: 872.Ts
+
+Code:
+// https://leetcode.com/problems/leaf-similar-trees/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const depthFirstLeafSequence = (root: TreeNode | null): number[] => {
+  if (root === null) return [];
+  if (root.left === null && root.right === null) return [root.val];
+
+  const leftVals = depthFirstLeafSequence(root.left);
+  const rightVal = depthFirstLeafSequence(root.right);
+  return [...leftVals, ...rightVal];
+};
+
+const leafSimilar = (root1: TreeNode | null, root2: TreeNode | null): boolean =>
+  depthFirstLeafSequence(root1).join(",") ===
+  depthFirstLeafSequence(root2).join(",");
+
+--------------------------------------------------
+
+--- Solution 35 ---
+File: 35-1448.ts
+Path: LeetCode-75/35-1448.ts
+Language: TypeScript
+Extracted Number: 35
+Extracted Title: 1448.Ts
+
+Code:
+// https://leetcode.com/problems/path-sum-iii/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const depthFirstGoodCount = (root: TreeNode | null, max: number): number => {
+  if (root === null) return 0;
+
+  max = Math.max(root.val, max);
+
+  return (
+    (root.val === max ? 1 : 0) +
+    depthFirstGoodCount(root.left, max) +
+    depthFirstGoodCount(root.right, max)
+  );
+};
+
+const goodNodes = (root: TreeNode | null): number =>
+  depthFirstGoodCount(root, root.val);
+
+--------------------------------------------------
+
+--- Solution 36 ---
+File: 36-437.ts
+Path: LeetCode-75/36-437.ts
+Language: TypeScript
+Extracted Number: 36
+Extracted Title: 437.Ts
+
+Code:
+// https://leetcode.com/problems/path-sum-iii/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const depthFirstPathSumCount = (
+  root: TreeNode | null,
+  targetSum: number,
+  pathSumMap: Map<TreeNode, number>
+): number[] => {
+  if (root === null) return [0, 0];
+
+  pathSumMap.set(root, root.val);
+
+  let localPathSumCount = 0;
+
+  pathSumMap.forEach((val, key) => {
+    if (key !== root) val += root.val;
+    if (val === targetSum) localPathSumCount++;
+    pathSumMap.set(key, val);
+  });
+
+  const [leftTreePathSumCount, leftChildVal] = depthFirstPathSumCount(
+    root.left,
+    targetSum,
+    pathSumMap
+  );
+
+  if (leftChildVal)
+    pathSumMap.forEach((val, key) => pathSumMap.set(key, val - leftChildVal));
+
+  const [rightTreePathSumCount, rightChildVal] = depthFirstPathSumCount(
+    root.right,
+    targetSum,
+    pathSumMap
+  );
+
+  pathSumMap.delete(root);
+
+  if (rightChildVal)
+    pathSumMap.forEach((val, key) => pathSumMap.set(key, val - rightChildVal));
+
+  return [
+    localPathSumCount + leftTreePathSumCount + rightTreePathSumCount,
+    root.val,
+  ];
+};
+
+const pathSum = (root: TreeNode | null, targetSum: number): number =>
+  depthFirstPathSumCount(root, targetSum, new Map())[0];
+
+--------------------------------------------------
+
+--- Solution 37 ---
+File: 37-1372.ts
+Path: LeetCode-75/37-1372.ts
+Language: TypeScript
+Extracted Number: 37
+Extracted Title: 1372.Ts
+
+Code:
+// https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const depthFirstLongestZigZagPath = (
+  root: TreeNode | null,
+  direction: "L" | "R" | null
+): { currMax: number; max: number } => {
+  if (root === null) return { currMax: 0, max: 0 };
+
+  const rightRes = depthFirstLongestZigZagPath(root.right, "R");
+  const leftRes = depthFirstLongestZigZagPath(root.left, "L");
+
+  const max = Math.max(rightRes.max, leftRes.max);
+
+  if (direction === "L") {
+    const currMax = rightRes.currMax + 1;
+    return { currMax, max: Math.max(currMax, max) };
+  } else if (direction === "R") {
+    const currMax = leftRes.currMax + 1;
+    return { currMax, max: Math.max(currMax, max) };
+  } else {
+    return { currMax: max, max };
+  }
+};
+
+const longestZigZag = (root: TreeNode | null): number =>
+  depthFirstLongestZigZagPath(root, null).max;
+
+--------------------------------------------------
+
+--- Solution 38 ---
+File: 38-236.ts
+Path: LeetCode-75/38-236.ts
+Language: TypeScript
+Extracted Number: 38
+Extracted Title: 236.Ts
+
+Code:
+// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const depthFirstLowestCommonAncestor = (
+  root: TreeNode | null,
+  p: TreeNode | null,
+  q: TreeNode | null
+): TreeNode[] => {
+  if (root === null) return [];
+
+  const res = [
+    ...depthFirstLowestCommonAncestor(root.left, p, q),
+    ...depthFirstLowestCommonAncestor(root.right, p, q),
+  ];
+
+  if (res.length === 3) return res;
+
+  if (res.length === 2 || root === p || root === q) {
+    res.push(root);
+    if (res.length === 2) res.push(root);
+  }
+
+  return res;
+};
+
+const lowestCommonAncestor = (
+  root: TreeNode | null,
+  p: TreeNode | null,
+  q: TreeNode | null
+): TreeNode | null => depthFirstLowestCommonAncestor(root, p, q)[2];
+
+--------------------------------------------------
+
+--- Solution 39 ---
+File: 39-199.ts
+Path: LeetCode-75/39-199.ts
+Language: TypeScript
+Extracted Number: 39
+Extracted Title: 199.Ts
+
+Code:
+// https://leetcode.com/problems/binary-tree-right-side-view/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const rightSideView = (root: TreeNode | null): number[] => {
+  if (root === null) return [];
+
+  const values = [];
+  const queue = [root];
+
+  while (queue.length) {
+    const initialQueueLength = queue.length;
+
+    for (let i = 0; i < initialQueueLength; i++) {
+      const current = queue.shift();
+      if (i === initialQueueLength - 1) values.push(current.val);
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+  }
+
+  return values;
+};
+
+--------------------------------------------------
+
+--- Solution 40 ---
+File: 40-1161.ts
+Path: LeetCode-75/40-1161.ts
+Language: TypeScript
+Extracted Number: 40
+Extracted Title: 1161.Ts
+
+Code:
+// https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const maxLevelSum = (root: TreeNode | null): number => {
+  const queue = [root];
+
+  let level = 1,
+    maxSum = root.val,
+    maxLevel = 1;
+
+  while (queue.length) {
+    const initialQueueLength = queue.length;
+    let tempSum = 0;
+
+    for (let i = 0; i < initialQueueLength; i++) {
+      const current = queue.shift();
+      tempSum += current.val;
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+
+    if (tempSum > maxSum) {
+      maxLevel = level;
+      maxSum = tempSum;
+    }
+
+    level++;
+  }
+
+  return maxLevel;
+};
+
+--------------------------------------------------
+
+--- Solution 41 ---
+File: 41-700.ts
+Path: LeetCode-75/41-700.ts
+Language: TypeScript
+Extracted Number: 41
+Extracted Title: 700.Ts
+
+Code:
+// https://leetcode.com/problems/search-in-a-binary-search-tree/description/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const searchBST = (root: TreeNode | null, val: number): TreeNode | null => {
+  if(!root) return null;
+  if(root.val === val) return root;
+  return searchBST(root.val > val ? root.left : root.right, val);
+};
+
+--------------------------------------------------
+
+--- Solution 42 ---
+File: 42-450.ts
+Path: LeetCode-75/42-450.ts
+Language: TypeScript
+Extracted Number: 42
+Extracted Title: 450.Ts
+
+Code:
+// https://leetcode.com/problems/delete-node-in-a-bst/submissions/1119984696/?envType=study-plan-v2&envId=leetcode-75
+
+/**
+ * Definition for a binary tree node.
+ * class TreeNode {
+ *     val: number
+ *     left: TreeNode | null
+ *     right: TreeNode | null
+ *     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.left = (left===undefined ? null : left)
+ *         this.right = (right===undefined ? null : right)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const findMinBSTNode = (root: TreeNode | null): TreeNode | null =>
+  root.left ? findMinBSTNode(root.left) : root;
+
+const deleteBSTNode = (root: TreeNode | null, key: number): TreeNode | null => {
+  if (!root) return null;
+
+  if (key < root.val) {
+    root.left = deleteBSTNode(root.left, key);
+    return root;
+  }
+
+  if (key > root.val) {
+    root.right = deleteBSTNode(root.right, key);
+    return root;
+  }
+
+  // STARTING FROM HERE: key === root.val
+  if (root.left && root.right) {
+    const inorderSuccessor = findMinBSTNode(root.right);
+    root.val = inorderSuccessor.val;
+    root.right = deleteBSTNode(root.right, inorderSuccessor.val);
+    return root;
+  }
+
+  if (root.left) return root.left;
+  if (root.right) return root.right;
+  return null; // HERE: !root.left && !root.right
+};
+
+const deleteNode = (root: TreeNode | null, key: number): TreeNode | null =>
+  deleteBSTNode(root, key);
+
+--------------------------------------------------
+
+--- Solution 43 ---
+File: 1360.ts
+Path: Manara/1360.ts
+Language: TypeScript
+Extracted Number: 1360
+Extracted Title: Ts
+
+Code:
+// 1360. Number of Days Between Two Dates
+// https://leetcode.com/problems/number-of-days-between-two-dates/description/
+
+const daysBetweenDates = (date1: string, date2: string): number => {
+  const timestamp1 = new Date(date1).getTime();
+  const timestamp2 = new Date(date2).getTime();
+  return Math.abs(timestamp2 - timestamp1) / (1000 * 60 * 60 * 24);
+};
+
+--------------------------------------------------
+
+--- Solution 44 ---
+File: 1662.ts
+Path: Manara/1662.ts
+Language: TypeScript
+Extracted Number: 1662
+Extracted Title: Ts
+
+Code:
+// 1662. Check If Two String Arrays are Equivalent
+// https://leetcode.com/problems/check-if-two-string-arrays-are-equivalent/description/
+
+const arrayStringsAreEqual = (word1: string[], word2: string[]): boolean =>
+  word1.join("") === word2.join("");
+
+--------------------------------------------------
+
+--- Solution 45 ---
+File: 206.ts
+Path: Manara/206.ts
+Language: TypeScript
+Extracted Number: 206
+Extracted Title: Ts
+
+Code:
+// 206. Reverse Linked List
+// https://leetcode.com/problems/reverse-linked-list/description/
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     val: number
+ *     next: ListNode | null
+ *     constructor(val?: number, next?: ListNode | null) {
+ *         this.val = (val===undefined ? 0 : val)
+ *         this.next = (next===undefined ? null : next)
+ *     }
+ * }
+ */
+
+// @ts-nocheck
+const reverseList = (head: ListNode | null): ListNode | null => {
+  let curr = head, prev = null, next = null;
+  
+  while(curr) {
+      next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
+  }
+
+  return prev;
+};
+
+--------------------------------------------------
+
+--- Solution 46 ---
+File: 231.ts
+Path: Manara/231.ts
+Language: TypeScript
+Extracted Number: 231
+Extracted Title: Ts
+
+Code:
+// 231. Power of Two
+// https://leetcode.com/problems/power-of-two/description/
+
+const isPowerOfTwo = (n: number): boolean => {
+  if (n < 1) return false;
+
+  while (n > 1)
+    if (!(n % 1)) n /= 2;
+    else return false;
+
+  return true;
+};
+
+--------------------------------------------------
+
+--- Solution 47 ---
+File: 238.ts
+Path: Manara/238.ts
+Language: TypeScript
+Extracted Number: 238
+Extracted Title: Ts
+
+Code:
+// 238. Product of Array Except Self
+// https://leetcode.com/problems/product-of-array-except-self/description/
+
+// SOLVED IN: /LeetCode-75/07-238.ts
+
+--------------------------------------------------
+
+--- Solution 48 ---
+File: 268.ts
+Path: Manara/268.ts
+Language: TypeScript
+Extracted Number: 268
+Extracted Title: Ts
+
+Code:
+// 268. Missing Number
+// https://leetcode.com/problems/missing-number/description/
+
+const missingNumber = (nums: number[]): number => {
+  let sum1 = 0;
+
+  for (const el of nums) sum1 += el;
+
+  const sum2 = (nums.length * (nums.length + 1)) / 2;
+
+  return sum2 - sum1;
+};
+
+--------------------------------------------------
+
+--- Solution 49 ---
+File: 306.ts
+Path: Manara/306.ts
+Language: TypeScript
+Extracted Number: 306
+Extracted Title: Ts
+
+Code:
+// 306. Additive Number
+// https://leetcode.com/problems/additive-number/description/
+
+// If we can identify the first and second sub-numbers, we can then calculate the total number just using origin's length.
+// e.g.: Given 199100199, if we can identify the two firt number 1 and 99, then we can calculate the rest; 1 + 99 = 100, 99 + 100 = 199, etc.
+// The concatenation of those number here should be 199100199 which is equal to the original one, so we can confirm that it is additive.
+// We should ensure that the first sub-number is either zero, or doesn't start with zero if it is bigger than 9, same for the second.
+
+const getAdditiveNumberBasedOnLen = (
+  firstNb: string,
+  secondNb: string,
+  nbLen: number
+): string => {
+  let subNbs = [firstNb, secondNb]; // ARRAY CONTAINING SUB-NUMBERS
+  let tempLen = subNbs[0].length + subNbs[1].length; // LENGTH OF THE SUB-NUMBERS IF CONCATENATED
+
+  while (tempLen < nbLen) {
+    const beforeLastNum = Number(subNbs[subNbs.length - 2]); // BEFORE LAST SUB-NUMBER
+    const lastNum = Number(subNbs[subNbs.length - 1]); // LAST SUB-NUMBER
+
+    subNbs.push(String(beforeLastNum + lastNum)); // PUSH THEIR SUM
+
+    tempLen += subNbs[subNbs.length - 1].length; // ADD THE SUM'S LENGTH TO `tempLen`
+  }
+
+  return subNbs.join(""); // JOIN ALL SUB-NUMBERS AND RETURN IT AS A STRING
+};
+
+const isAdditiveNumber = (num: string) => {
+  // startIdx AND endIdx REPRESENT THE START AND END INDICES OF THE SECOND SUB-NUMBER
+  for (let startIdx = 1; startIdx < num.length; startIdx++) {
+    for (let endIdx = startIdx + 1; endIdx < num.length; endIdx++) {
+      // HANDLING THE CASE OF 'Numbers in the additive sequence cannot have leading zeros'
+      // IF THE SECOND SUB-NUMBER HAS LEADING ZEROS AND IS BIGGER THAN 9, BREAK, INCREMENT START INDEX, AND CHECK THE NEXT SECOND SUB-NUMBER
+      if (num[startIdx] === "0" && endIdx - startIdx > 1) break;
+
+      const firstNb = num.slice(0, startIdx);
+      const secondNb = num.slice(startIdx, endIdx);
+
+      // UP UNTIL HERE, THE PURPOSE IS TO GET THE FIRST AND SECOND SUB NUMBERS
+
+      // GIVEN THE FIRST AND SECOND SUB NUMBERS, GET THE ADDITIVE NUMBER BASED ON `num.length`
+      const additiveNbBasedOnLen = getAdditiveNumberBasedOnLen(
+        firstNb,
+        secondNb,
+        num.length
+      );
+
+      // IF THE PARAM AND CALCULATED ADDITIVE NUMBERS ARE EQUAL, RETURN TRUE
+      if (additiveNbBasedOnLen === num) return true;
+    }
+
+    if (num.startsWith("0")) return false; // IF THE FIRST SUB-NUMBER'S LENGTH IS GREATER THAN ONE AND ITS FIRST DIGIT IS ZERO, RETURN FALSE
+  }
+
+  return false; // NO VALID ADDITIVE NUMBER FOUND
+};
+
+--------------------------------------------------
+
+--- Solution 50 ---
+File: 454.ts
+Path: Manara/454.ts
+Language: TypeScript
+Extracted Number: 454
+Extracted Title: Ts
+
+Code:
+// 454. 4Sum II
+// https://leetcode.com/problems/4sum-ii/description/
+
+const fourSumCount = (
+  nums1: number[],
+  nums2: number[],
+  nums3: number[],
+  nums4: number[]
+): number => {
+  let count = 0,
+    map = new Map();
+
+  for (const el1 of nums1)
+    for (const el2 of nums2) {
+      const sum: number = el1 + el2;
+      map.set(sum, (map.get(sum) || 0) + 1);
+    }
+
+  for (const el1 of nums3)
+    for (const el2 of nums4) {
+      const target: number = -el1 - el2;
+      if (map.has(target)) count += map.get(target)!;
+    }
+
+  return count;
+};
+
+--------------------------------------------------
+
+--- Solution 51 ---
+File: 503.ts
+Path: Manara/503.ts
+Language: TypeScript
+Extracted Number: 503
+Extracted Title: Ts
+
+Code:
+// 503. Next Greater Element II
+// https://leetcode.com/problems/next-greater-element-ii/description/
+
+// =======================
+// TIME COMPLEXITY: O(N^2)
+// =======================
+
+// const getNextGreatElement = (nums: number[], startIdx: number, endIdx: number, val: number): number => {
+//     for (let i = startIdx; i < endIdx; i++)
+//         if (nums[i] > val) return nums[i];
+
+//     return val;
+// }
+
+// const nextGreaterElements = (nums: number[]): number[] => {
+//     const res = [];
+
+//     for (let i = 0; i < nums.length; i++) {
+//         let val = getNextGreatElement(nums, i + 1, nums.length, nums[i])
+//         if (val === nums[i]) val = getNextGreatElement(nums, 0, i, val)
+//         res.push(val === nums[i] ? -1 : val);
+//     }
+
+//     return res;
+// };
+
+// const nextGreaterElements = (nums: number[]): number[] => {
+//     const res = [];
+
+//     for (let i = 0; i < nums.length; i++) {
+//         let curr = nums[i];
+
+//         for (let j = i + 1; j < nums.length + i; j++) {
+//             const correctJ = j % nums.length;
+
+//             if (nums[correctJ] > curr) {
+//                 curr = nums[correctJ];
+//                 break;
+//             }
+//         }
+
+//         res.push(curr === nums[i] ? -1 : curr);
+//     }
+
+//     return res;
+// };
+
+const nextGreaterElements = (nums: number[]): number[] => {
+  const stack: number[] = [];
+  const res = Array(nums.length).fill(-1);
+
+  for (let i = 0; i < nums.length * 2; i++) {
+    while (
+      stack.length &&
+      nums[stack[stack.length - 1]] < nums[i % nums.length]
+    )
+      res[stack.pop()!] = nums[i % nums.length];
+
+    stack.push(i % nums.length);
+  }
+
+  return res;
+};
+
+--------------------------------------------------
+
+--- Solution 52 ---
+File: Arrays.java
+Path: Old/src/helpers/Arrays.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Arrays
+
+Code:
+package helpers;
+
+public class Arrays {
+    public static Character[] boxArray(char[] arr) {
+        Character[] boxedArr = new Character[arr.length];
+        for (int i = 0; i < arr.length; i++) boxedArr[i] = arr[i];
+        return boxedArr;
+    }
+
+    public static Integer[] boxArray(int[] arr) {
+        Integer[] boxedArr = new Integer[arr.length];
+        for (int i = 0; i < arr.length; i++) boxedArr[i] = arr[i];
+        return boxedArr;
+    }
+
+    // GENERIC FUNCTION
+    public static <T> void display(T[] arr) {
+        if (arr.length == 0) {
+            System.out.println("[]");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder("[");
+        for (T el : arr) sb.append(el).append(", ");
+        sb.delete(sb.length() - 2, sb.length()).append("]");
+        System.out.println(sb);
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 53 ---
+File: ExecutionTimer.java
+Path: Old/src/helpers/ExecutionTimer.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Executiontimer
+
+Code:
+package helpers;
+
+
+/**
+ * @noinspection unused
+ */
+public class ExecutionTimer {
+    private long startTime, endTime;
+    private final In in;
+
+    // 1 SECOND = 1_000 or 10^3 MILLISECOND = 1_000_000_000 or 10^9 NANOSECOND
+    public enum In {
+        SECONDS("SECONDS"),
+        MILLI_SECONS("MILLI_SECONS"),
+        NANO_SECONDS("NANO_SECONDS)");
+
+        public final String label;
+
+        In(String label) {
+            this.label = label;
+        }
+    }
+
+    public ExecutionTimer() {
+        this.in = In.NANO_SECONDS;
+        start();
+    }
+
+    public ExecutionTimer(In in) {
+        this.in = in;
+        start();
+    }
+
+    public void start() {
+        startTime = System.nanoTime();
+    }
+
+    public void stop() {
+        endTime = System.nanoTime();
+        showTime();
+    }
+
+    public void showTime() {
+        // NO FALL THROUGH WITH ARROW SYNTAX SO BREAK IS NOT REQUIRED, {} FOR BLOCK
+        switch (in) {
+            case SECONDS -> System.out.println("EXECUTION TIME IN SECONDS: " + this.getTimeInSeconds());
+            case MILLI_SECONS -> System.out.println("EXECUTION TIME IN MILLISECONDS: " + this.getTimeInMilliseconds());
+            case NANO_SECONDS -> System.out.println("EXECUTION TIME IN NANOSECONDS: " + this.getTimeInNanoseconds());
+        }
+    }
+
+    public long getTimeInNanoseconds() {
+        return endTime - startTime;
+    }
+
+    public long getTimeInMilliseconds() {
+        return (endTime - startTime) / 1_000_000;
+    }
+
+    public long getTimeInSeconds() {
+        return (endTime - startTime) / 1_000_000_000;
+    }
+
+    public static long getTimeInNanoseconds(ExecutionTimer ex) {
+        return (ex.endTime - ex.startTime);
+    }
+
+    public static long getTimeInNanoseconds(long startTime, long endTime) {
+        return (endTime - startTime);
+    }
+
+    public static long getTimeInMilliseconds(ExecutionTimer ex) {
+        return (ex.endTime - ex.startTime) / 1_000_000;
+    }
+
+    public static long getTimeInMilliseconds(long startTime, long endTime) {
+        return (endTime - startTime) / 1_000_000;
+    }
+
+    public static long getTimeInSeconds(ExecutionTimer ex) {
+        return (ex.endTime - ex.startTime) / 1_000_000_000;
+    }
+
+    public static long getTimeInSeconds(long startTime, long endTime) {
+        return (endTime - startTime) / 1_000_000_000;
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 54 ---
+File: PackageNameGenerator.java
+Path: Old/src/helpers/PackageNameGenerator.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Packagenamegenerator
+
+Code:
+package helpers;
+
+import java.util.Scanner;
+
+public class PackageNameGenerator {
+    // 58. Length of Last Word --> problems.problem_0058_length_of_last_word
+    public static String fromProblemName(String problemName) {
+        String[] arr = problemName.toLowerCase().split(" ");
+
+        // REMOVE DOT AT THE END
+        String nb = Strings.padLeftZeros(arr[0].substring(0, arr[0].length() - 1), 4);
+
+        StringBuilder res = new StringBuilder("problem_").append(nb);
+        for (int i = 1; i < arr.length; i++) res.append("_").append(arr[i]);
+        return res.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("ENTER PROBLEM NAME: ");
+        String problemName = sc.nextLine();
+        System.out.println("PACKAGE NAME: " + fromProblemName(problemName));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 55 ---
+File: RandomNumberGenerator.java
+Path: Old/src/helpers/RandomNumberGenerator.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Randomnumbergenerator
+
+Code:
+package helpers;
+
+import java.util.Random;
+
+public class RandomNumberGenerator {
+    private final static Random random = new Random();
+
+    public static int between(int min, int max) {
+        // return random.nextInt(max - min + 1) + min;
+        return random.nextInt(min, max + 1);
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 56 ---
+File: Strings.java
+Path: Old/src/helpers/Strings.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Strings
+
+Code:
+package helpers;
+
+public class Strings {
+    public static String padLeftZeros(String str, int length) {
+        if (str.length() >= length) return str;
+
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < length - str.length()) sb.append('0');
+        sb.append(str);
+
+        return sb.toString();
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 57 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0001_two_sum/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0001_two_sum;
+
+// LINK: https://leetcode.com/problems/two-sum/
+
+public class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        for (int i = 0; i < nums.length; i++)
+            for (int j = 0; j < nums.length; j++)
+                if (nums[i] + nums[j] == target && i != j)
+                    return new int[]{i, j};
+        return null;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 4};
+        int target = 6;
+        int[] output = new Solution().twoSum(nums, target);
+        for (int n : output) System.out.println(n);
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 58 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0003_longest_substring_without_repeating_characters/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0003_longest_substring_without_repeating_characters;
+
+// LINK: https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int max = 0;
+        for (int i = 0; i < s.length(); i++) {
+            StringBuilder sb = new StringBuilder().append(s.charAt(i));
+
+            for (int j = i + 1; j < s.length(); j++) {
+                int idx = sb.indexOf(String.valueOf(s.charAt(j)));
+                if (idx == -1) sb.append(s.charAt(j));
+                else break;
+            }
+
+            if (sb.length() >= max) max = sb.length();
+        }
+        return max;
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 59 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0009_palindrome_number/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0009_palindrome_number;
+
+// LINK: https://leetcode.com/problems/palindrome-number/
+
+public class Solution {
+    public String reverse(String s) {
+        StringBuilder temp = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i--)
+            temp.append(s.charAt(i));
+        return String.valueOf(temp);
+    }
+
+    public boolean isPalindrome(int x) {
+        String s = String.valueOf(x);
+        return s.equals(reverse(s));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().isPalindrome(1234567899));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 60 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0012_integer_to_roman/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0012_integer_to_roman;
+
+// LINK: https://leetcode.com/problems/integer-to-roman/
+
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
+
+public class Solution {
+    final public static LinkedHashMap<String, Double> ROMANS = new LinkedHashMap<>();
+
+    static {
+        ROMANS.put("M", 1000.0);
+        ROMANS.put("CM", 900.0);
+        ROMANS.put("D", 500.0);
+        ROMANS.put("CD", 400.0);
+        ROMANS.put("C", 100.0);
+        ROMANS.put("XC", 90.0);
+        ROMANS.put("L", 50.0);
+        ROMANS.put("XL", 40.0);
+        ROMANS.put("X", 10.0);
+        ROMANS.put("IX", 9.0);
+        ROMANS.put("V", 5.0);
+        ROMANS.put("IV", 4.0);
+        ROMANS.put("I", 1.0);
+    }
+
+    public String intToRoman(int num) {
+        var ref = new Object() {
+            int temp = num;
+        };
+
+        return ROMANS.entrySet().stream().map((e) -> {
+            int currRomanCount = (int) (Math.floor(ref.temp / e.getValue()));
+            ref.temp = (int) (ref.temp % e.getValue());
+            return e.getKey().repeat(currRomanCount);
+        }).collect(Collectors.joining(""));
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+        System.out.println(solution.intToRoman(2022));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 61 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0013_roman_to_integer/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0013_roman_to_integer;
+
+import java.util.ArrayList;
+
+// LINK: https://leetcode.com/problems/roman-to-integer/
+// I 1 | V 5 | X 10 | L 50 | C 100 | D 500 | M 1000
+// LVIII   (50 5 1 1 1)               = 58
+// MCMXCIV (1000 100 1000 10 100 1 5) = 1994
+// I can be placed before V (5) and X (10) to make 4 and 9.
+// X can be placed before L (50) and C (100) to make 40 and 90.
+// C can be placed before D (500) and M (1000) to make 400 and 900.
+
+public class Solution {
+    public int romanToInt(String s) {
+        ArrayList<Integer> l = new ArrayList<>();
+        for (char c : s.toCharArray())
+            switch (c) {
+                case 'I':
+                    l.add(1);
+                    break;
+                case 'V':
+                    l.add(5);
+                    break;
+                case 'X':
+                    l.add(10);
+                    break;
+                case 'L':
+                    l.add(50);
+                    break;
+                case 'C':
+                    l.add(100);
+                    break;
+                case 'D':
+                    l.add(500);
+                    break;
+                case 'M':
+                    l.add(1000);
+                    break;
+                default:
+                    break;
+            }
+
+        for (int i = 0; i < l.size(); i++)
+            if (i + 1 < l.size() && l.get(i) < l.get(i + 1)) {
+                l.set(i + 1, l.get(i + 1) - l.get(i));
+                l.remove(i);
+            }
+
+        int sum = 0;
+        for (int n : l) sum += n;
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().romanToInt("MCMXCIV"));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 62 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0014_longest_common_prefix/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0014_longest_common_prefix;
+
+import java.util.Arrays;
+
+// LINK: https://leetcode.com/problems/longest-common-prefix/
+
+public class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        // MORE ABOUT STREAMS: https://www.geeksforgeeks.org/stream-in-java/
+        String shortestStr = Arrays.stream(strs)
+                .reduce(strs[0], (res, s) -> s.length() < res.length() ? s : res);
+
+        StringBuilder prefix = new StringBuilder();
+
+        outerloop:
+        for (int i = 0; i < shortestStr.length(); i++) {
+            for (String s : strs)
+                if (s.charAt(i) != shortestStr.charAt(i)) break outerloop;
+            prefix.append(shortestStr.charAt(i));
+        }
+
+        return String.valueOf(prefix);
+    }
+
+    public static void main(String[] args) {
+        String[] strs = {"flower", "flow", "flight"};
+        System.out.println(new Solution().longestCommonPrefix(strs));
+    }
+}
+--------------------------------------------------
+
+--- Solution 63 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0019_remove_nth_node_from_end_of_list/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0019_remove_nth_node_from_end_of_list;
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+        this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+/**
+ * @noinspection DuplicatedCode
+ */
+public class Solution {
+    public int getLength(ListNode head) {
+        int length = 0;
+        while (head != null) {
+            length++;
+            head = head.next;
+        }
+        return length;
+    }
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null || head.next == null && n == 1) return null;
+
+        ListNode ln = head;
+        int length = getLength(head);
+
+        if (n == length) return head.next;
+        if (n > length) return head;
+
+        int i = 0, prevLnIdxToRemove = length - n - 1;
+        ln = head;
+        while (i != prevLnIdxToRemove) {
+            ln = ln.next;
+            i++;
+        }
+
+        if (ln.next != null) ln.next = ln.next.next;
+        return head;
+    }
+
+    public ListNode getInitialHead() {
+        ListNode ln, head;
+
+        ln = new ListNode(1);
+        head = ln;
+
+        ln.next = new ListNode(2);
+        ln = ln.next;
+
+        ln.next = new ListNode(3);
+        ln = ln.next;
+
+        ln.next = new ListNode(4);
+        ln = ln.next;
+
+        ln.next = new ListNode(5);
+        return head;
+    }
+
+    public void displayListNode(ListNode ln) {
+        while (ln != null) {
+            System.out.print(ln.val + " ");
+            ln = ln.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        ListNode head = solution.getInitialHead();
+        solution.displayListNode(solution.removeNthFromEnd(head, 3));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 64 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0020_valid_parentheses/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0020_valid_parentheses;
+
+// LINK: https://leetcode.com/problems/valid-parentheses/
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+    public boolean isValid(String s) {
+        List<Character> l = new ArrayList<>();
+
+        char lastAddedChar = 0;
+        for (char c : s.toCharArray()) {
+            if (!l.isEmpty()) lastAddedChar = l.get(l.size() - 1);
+
+            if (!l.isEmpty() && (lastAddedChar == '[' && c == ']'
+                    || lastAddedChar == '(' && c == ')'
+                    || lastAddedChar == '{' && c == '}'))
+                l.remove(l.size() - 1);
+            else
+                l.add(c);
+        }
+
+        return l.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.isValid("()[]{}"));
+        System.out.println(solution.isValid("(]"));
+        System.out.println(solution.isValid("{[]}"));
+        System.out.println(solution.isValid("(){}}{"));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 65 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0021_merge_two_sorted_lists/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0021_merge_two_sorted_lists;
+
+// LINK: https://leetcode.com/problems/merge-two-sorted-lists/
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+        this.val = val;
+    }
+
+    /**
+     * @noinspection unused
+     */
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+public class Solution {
+    public ListNode mergeTwoLists(ListNode ln1, ListNode ln2) {
+        if (ln1 == null && ln2 == null) return null;
+        if (ln1 == null) return ln2;
+        if (ln2 == null) return ln1;
+        ListNode mergedLN = null, head = null;
+
+        while (ln1 != null || ln2 != null) {
+            if (mergedLN == null) {
+                mergedLN = new ListNode();
+                head = mergedLN;
+            } else {
+                mergedLN.next = new ListNode();
+                mergedLN = mergedLN.next;
+            }
+
+            if (ln1 == null) {
+                mergedLN.val = ln2.val;
+                mergedLN.next = ln2.next;
+                break;
+            }
+            if (ln2 == null) {
+                mergedLN.val = ln1.val;
+                mergedLN.next = ln1.next;
+                break;
+            }
+
+            int minVal;
+            if (ln1.val <= ln2.val) {
+                minVal = ln1.val;
+                ln1 = ln1.next;
+            } else {
+                minVal = ln2.val;
+                ln2 = ln2.next;
+            }
+
+            mergedLN.val = minVal;
+        }
+
+        return head;
+    }
+
+    public ListNode[] getInitialHeads() {
+        ListNode ln1, ln2, head1, head2;
+
+        ln1 = new ListNode(1);
+        ln2 = new ListNode(1);
+        head1 = ln1;
+        head2 = ln2;
+
+        ln1.next = new ListNode(2);
+        ln2.next = new ListNode(3);
+        ln1 = ln1.next;
+        ln2 = ln2.next;
+
+        ln1.next = new ListNode(4);
+        ln2.next = new ListNode(4);
+
+        return new ListNode[]{head1, head2};
+    }
+
+    public void displayListNode(ListNode ln) {
+        while (ln != null) {
+            System.out.print(ln.val + " ");
+            ln = ln.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        ListNode[] lns = solution.getInitialHeads();
+        ListNode mergedLN = solution.mergeTwoLists(lns[0], lns[1]);
+        solution.displayListNode(mergedLN);
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 66 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0026_remove_duplicates_from_sorted_array/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0026_remove_duplicates_from_sorted_array;
+
+// LINK: https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+
+public class Solution {
+    public int removeDuplicates(int[] nums) {
+        int k = nums.length;
+        for (int i = 0; i < k - 1; i++)
+            if (nums[i] == nums[i + 1]) {
+                for (int j = i + 1; j < k; j++)
+                    nums[j - 1] = nums[j];
+                k--;
+                i--;
+            }
+
+        return k;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().removeDuplicates(new int[]{1, 1, 2}));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 67 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0027_remove_element/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0027_remove_element;
+
+// LINK: https://leetcode.com/problems/remove-element/
+
+public class Solution {
+    public int removeElement(int[] nums, int val) {
+        int k = nums.length;
+        for (int i = 0; i < k; i++)
+            if (nums[i] == val) {
+                if (nums.length - (i + 1) >= 0)
+                    // WITH SOME HELP FROM IntelliJ :D
+                    System.arraycopy(
+                            nums,
+                            i + 1,
+                            nums,
+                            i + 1 - 1,
+                            nums.length - (i + 1)
+                    );
+                k--;
+                i--;
+            }
+
+        return k;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().removeElement(new int[]{3, 2, 2, 3}, 3));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 68 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0028_implement_strstr/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0028_implement_strstr;
+
+// LINK: https://leetcode.com/problems/implement-strstr/
+
+public class Solution {
+    public int strStr(String haystack, String needle) {
+        if (needle.isEmpty()) return 0;
+        for (int i=0; i <= haystack.length() - needle.length(); i++) {
+            String sub = haystack.substring(i, i + needle.length());
+            if (sub.equals(needle)) return i;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().strStr("aaaaa", "bba"));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 69 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0035_search_insert_position/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0035_search_insert_position;
+
+// LINK: https://leetcode.com/problems/search-insert-position/
+
+public class Solution {
+    // TODO: SOLVE IT USING BINARY SEARCH ALGORITHM
+    public int searchInsert(int[] nums, int target) {
+        for (int i = 0; i < nums.length; i++)
+            if (nums[i] >= target) return i;
+        return nums.length;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().searchInsert(new int[]{1, 3, 5, 6}, 8));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 70 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0053_maximum_subarray/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0053_maximum_subarray;
+
+// LINK: https://leetcode.com/problems/maximum-subarray/
+
+import helpers.ExecutionTimer;
+
+public class Solution {
+    // CORRECT BUT NOT ACCEPTED, REASON IS TIME LIMIT EXCEEDED
+    // public int maxSubArray(int[] nums) {
+    //     int sum = nums[0];
+    //     for (int i = 0; i < nums.length; i++)
+    //         for (int j = i, tempSum = 0; j < nums.length; j++) {
+    //             tempSum += nums[j];
+    //             if (tempSum > sum) sum = tempSum;
+    //         }
+    //     return sum;
+    // }
+
+    // TODO: USE THE DIVIDE AND CONQUER APPROACH
+    public int maxSubArray(int[] nums) {
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        ExecutionTimer ex = new ExecutionTimer();
+        System.out.println(new Solution().maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+        // System.out.println(new Solution().maxSubArray(new int[]{1}));
+        // System.out.println(new Solution().maxSubArray(new int[]{5, 4, -1, 7, 8}));
+        // System.out.println(new Solution().maxSubArray(new int[]{5528, -444, -2520, 8588, -8658, 4122, -5493, 1748, 1306, 7475, 4488, -9532, 5605, -4589, 1711, 3504, 5213, -9923, 7613, 2445, -5999, -1594, 3961, -3236, 5057, 3745, 9724, 6429, -6768, 6502, -529, -6117, 9874, -7928, -6328, 9552, 5863, 8174, 8238, 3890, -4307, -4256, 3411, -7121, -4098, 7853, 6534, 4876, -8443, -4887, 8818, -9352, 1477, -9181, 5329, -8534, -8808, -4475, 6565, -4828, 7372, -7175, -7481, 9502, -9537, 6098, 7319, -670, 3462, -6303, 7642, -1855, 2606, -5868, -9450, -7795, 9992, -3483, 2826, -4342, 3735, -7497, -2607, -1179, 6110, 8429, 9537, 9818, -7671, -3510, 8399, -2240, -925, 5212, 129, 1647, 257, -8737, 661, 7999, 9755, 9728, -2180, -7810, -5312, 6902, 5031, -9149, 9385, 7185, -524, 8180, -3649, -9095, 2009, 9828, -2649, -4426, 7238, -123, 7480, 9958, -8045, 8470, -8384, -2623, -5963, -6873, -2489, -4476, -9587, 4577, 3901, -9167, 8196, -5675, 3306, 6814, 3664, 6479, -1883, -2749, 6926, -8501, 601, -4533, 4709, 6389, 1970, 26, -3649, -4008, 284, 6643, 2497, 7976, 1407, -3250, 1710, 5661, 2368, 2098, -772, -3383, -4948, 2525, 452, -8158, 9367, 5059, 6364, 8340, 6474, 6790, 1496, -8051, -7237, 5419, 3695, -4540, 9398, -8554, -9465, -535, -6949, -5555, -9587, 7563, -1048, 3652, 1259, -1381, 5043, -3494, -4521, 6508, -8144, 4739, -8816, 4970, 6597, -3438, -3666, -4518, 9578, -1772, -7431, 7180, -6682, -4390, -9556, 3989, 6890, 6843, 8621, 4866, 7773, 6578, 8665, 1613, -4245, 242, -3518, 2713, -9786, -2328, 6451, 2240, -1997, -4890, 3504, -929, 4538, -9309, -6490, -8243, 4706, 382, 3724, 3395, 2213, 4521, 8287, -8598, 6646, 9055, -9414, 8034, -7997, 1332, 574, 3196, 7120, -484, 3673, 6173, -164, 8082, -3584, 8887, -8110, -5696, 3380, 7684, 3012, -9277, 3568, 2810, 5670, -2407, -9055, -837, -9949, -4621, -5645, -4249, 6638, 6507, -1277, 2017, -2226, 6960, 8200, 74, 9179, -7692, 8460, 5629, 5785, 4620, 241, -3878, -9843, 4249, -8117, 8708, -2870, -2715, -7761, 6140, -8051, -8716, -57, -8737, 7931, 6440, 1102, 5413, -4224, -3232, 7418, -4604, -3849, -3031, 5700, -2820, 7249, 7661, -6160, -8195, -3584, -6944, -2622, -2507, 3404, 9158, -8847, -596, 4011, -9254, 6405, -3261, -9011, 8158, 6370, 8141, -443, -2367, -7286, -7961, 9193, 671, -8392, 5756, -1997, 3942, 2274, 8721, 5438, 4412, 7680, 8598, 8017, 9228, 5780, 6515, -1406, 5875, -2, -2010, 3122, -4421, -8458, -6754, 117, -808, 1024, 8495, 9988, -7733, 9631, 9773, -8652, -6949, -3213, -5806, 9187, 5067, -9277, 9178, -863, 4269, -4714, -3235, -3483, -1396, 5992, 7144, -5076, 9456, -8271, -6700, -4226, -5859, -8136, -8039, -7266, -7055, 8550, 350, -3892, -7935, 8493, 1590, 4273, 836, 9910, -5219, -199, -4991, -1654, -8509, 1790, -9604, -6858, -3120, 7730, -6653, 3054, 4089, 9781, -3928, 8539, 1930, -5032, -5771, 8873, -4373, 6562, -6510, -3146, -2048, 2658, 3504, 7970, -8973, -6749, 4970, -6327, -5906, 2462, -6952, 6110, -7847, 3602, 7866, -4534, 8421, -8413, -8079, 9895, 2733, 368, 4253, -6579, -4785, 990, 5539, 8721, 4651, -5614, -7150, 7620, 8557, -5126, -5945, 9694, 5131, -8667, 9145, -8786, 7136, -3180, 8614, -1874, 2091, 9473, 450, 4043, -7029, 2306, -8420, -4305, -4049, 8049, -3949, 1810, 5517, -9052, 3906, 6483, 9373, -5196, -2956, 3549, -5260, -2836, 8503, -8251, -345, 6402, 3467, -7571, 3232, -1885, -1682, -7839, -3115, -3021, -6307, 4676, 5291, -5204, 2413, -3170, -8202, 7112, 7988, -7678, 1105, -7156, -7268, -9610, -8810, 9196, 6326, -6044, 4661, 2756, 2549, 8014, 4041, 5644, -1547, -8401, -8554, 7466, -3050, 7573, 5750, 762, -9271, 6527, 293, 7641, -7714, -9927, -7970, 571, -7703, 5009, -7674, 8529, 5601, 5416, 6333, -8058, 7617, -7508, 8677, 7033, -9095, 3280, 2914, -9542, 8882, 7580, 1769, 5647, -8513, 8116, -3752, -7192, -4660, 4887, 7393, 8345, -7749, -9369, 7261, -1825, 2959, 6723, 9816, -2578, 144, -7594, 5299, -3659, 6059, 7527, 4386, -9295, 1555, -7746, -4357, -2950, 6243, 9222, 5847, -3091, 6900, -2728, 530, -1700, 7471, 1144, 1573, 4611, 1978, 1158, 3787, -884, 3433, -6789, 9165, 6315, -8622, 3265, 2595, -3332, 8241, 6427, 3714, -5379, 7982, -1016, 7329, -7188, 8189, -3622, 846, 6983, -3808, -1300, -3079, 2454, 9956, 5463, -9072, -1218, -1928, -6203, -9600, 8436, -9326, 2509, 3207, 7359, 6330, 6414, 6563, 6285, -9573, 2051, -7404, 142, -6148, 3213, -5866, -9837, 9116, -6961, 5970, 8091, 5538, 3260, -4018, -5620, 3, 2333, -2130, -3008, 6369, -9550, 6369, 9252, 7633, 7394, -7153, 919, 8730, -1713, 579, 8527, -5706, 4033, -6895, 7738, -5691, 6243, -3096, -3596, 2305, 8269, 6538, 635, 6034, -1863, 9479, 5190, -7885, -245, 9975, -6092, -9619, -8057, 8589, -9857, 3866, -9271, 9784, -8352, 7267, 2278, 6430, 7893, 9097, -2689, -1555, 2044, -8893, 4731, 2442, -5672, 7888, -6475, 1438, -4168, -2041, 1638, 427, 5668, -6586, -8204, -9999, 7400, -3606, 2831, -5321, 262, -4676, -2441, 5574, -8277, 925, -6310, 189, -4238, -4786, -7879, 8774, -5467, 1335, 7334, -166, -3600, -8981, -7518, 7198, 9972, -9608, -2305, 736, 497, -4208, -9968, 3042, -2112, -1500, 2595, -2064, 5439, 2754, -8960, -6434, 1360, -4093, 158, 2937, -7947, 838, 6880, 8926, 4669, -170, -2493, -7254, 5684, 4441, -3434, 8539, -19, 9320, -2121, 9560, -2800, -5730, 2855, -6290, -2941, 314, -8313, 6686, -2097, 2220, 27, -3174, 2556, 5542, -3421, 6149, -6185, 8462, -456, 6689, 2905, -1932, 746, -8556, 161, 9932, -6974, -9783, 1218, -4690, 8303, -3759, 7050, 4268, -1721, 9113, -288, 4567, 920, 8728, -1813, 3925, -4088, -8255, -1819, -6600, -1276, -6703, 2433, -7779, -5245, 3892, -2566, -6153, -160, -7600, 646, 7224, -4554, -4472, 1744, -1507, 2987, -6100, 5797, 2845, -8493, -4195, -9050, -189, 4414, -7780, -9238, -7159, -478, 5230, 4344, 3325, 7585, 5162, -7911, -658, -2976, -9570, -6823, 2100, -5316, 8535, 6198, -24, 3162, 2119, 7070, -3032, -6152, -5524, -9310, -62, 889, -5310, 1749, -7847, 4400, -2615, -331, 9452, -1328, -2774, -9767, -8669, -8085, -7886, -192, -7085, 7427, 1895, 8503, 3510, 8065, -3134, -5881, 7603, 5105, 836, -3628, -5461, -3033, 410, -6464, -1956, -9436, -43, -9662, 142, 8614, 8571, -3738, -4043, -339, 3270, 1535, 2062, -8820, 5433, 1341, -13, 9098, -4252, 1907, -2757, 9775, -8090, -5121, 3050, -9761, 9151, -3359, -3210, -2173, -4473, -77, -5362, -7433, 916, 4575, 4395, 1066, 439, 988, 3893, 976, -848, -6903, -8378, -3890, 8302, 8094, -5703, 8711, 5445, -2772, 5072, 9598, -9451, 7507, -4983, 2245, 4889, -919, 6314, -2434, 5572, 976, -4760, 3403, 6415, 5673, -5701, 2279, -3843, 1933, 6561, -3728, -6719, -1745, 7353, 7726, 5425, 5678, -816, 5156, -7091, 3252, -3933, 9408, 8231, 8279, -5229, -6529, 4143, 4631, 5464, 4012, 3424, 2871, 7827, 6495, -1027, 3281, -977, -9059, -5010, 6837, 1043, -4798, 7669, 7634, 6695, -1445, 3776, -5571, 6348, 6873, 502, -1172, 7579, 1771, -1662, 4387, -6680, 116, 8346, -9153, 9048, -2413, 7213, 1149, 9024, 7483, 6905, -3451, 8887, 1162, 6238, 2190, -6993, -8606, 1438, -6867, -5004, -1611, -2949, -6497, -2913, -2132, -90, -3551, -4106, 2315, 1213, -5411, -7014, 9575, 3805, -4384, -4213, -5186, 7367, 2790, 5896, 2947, -7010, 17, -7392, -3002, -2334, 8198, -4731, 586, -6219, -5288, -8971, -600, 3356, 3711, 3433, 6794, -5037, -4443, 5131, 696, 4289, -8779, 5888, 3964, -5299, 7757, -6512, 329, -731, 2072, 2612, -416, 9046, 914, -2415, -9899, 2210, -9466, 1075, 6736, -5916, 6557, 1484, -860, 2729, -4669, -8013, 3620, 9223, -5411, -7289, -6099, -6334, 507, 4226, -6889, 5288, 564, -1926, -7888, -2669, 7604, -2444, -7470, -3264, -6189, -8609, 6345, -3192, 5005, -9118, 3263, -5313, 2133, 3112, 4955, -3275, 7749, -555, 3575, -5452, -9751, 2294, -3140, 9228, -6770, 5927, -5827, -5192, -7987, -6766, -7469, 6757, 1245, 61, 1797, 9507, -5541, 7539, 3164, -1270, -5856, -2209, 6277, -3887, -7751, -9455, 9182, 2378, -8598, -6533, 20, 7045, 68, -2797, 6966, -3393, 8145, 3065, -7618, -2429, 8277, -2313, -6451, 260, -6101, -9184, 429, 5142, 5234, -2006, -3061, -1123, 7244, -1916, -9887, -2127, -9272, 8923, 5516, -3280, -7842, 1145, 3593, -5432, -4083, -4998, 3937, 1238, -4899, -2664, 6154, -4086, 3903, -3894, -3226, -4458, -7152, -5772, 1061, 2459, -8798, -7278, -5310, 158, -454, 3912, 8365, 9531, 620, -3570, 7306, 297, -3956, 6904, -7624, -8105, -3742, -8577, -9456, 3703, -6481, 8484, -5385, -2638, -436, -4050, 7488, -429, 4962, 3928, -9119, 8933, 5170, -1032, -1407, 406, 6435, -7860, -5157, 9828, -8227, 1988, -9879, -2909, 5813, 8515, 2318, -436, -1767, 3856, -8533, -3943, 8531, 4880, 5559, 3326, -8286, -4247, 3395, 5067, -1915, -8966, 3380, -1806, 5574, -3539, 8773, 7987, -4937, 8536, 7101, 7270, -1499, -8937, -1185, 5795, -1203, -5270, -1105, 9957, -5222, 4437, 5116, -1088, 6608, -595, 1462, -7617, 1849, 8528, 302, 3376, 6247, -6454, 7950, 199, -7051, -6143, 6272, 8537, 3968, 9703, 7475, -1873, -5474, 2546, -5719, -5650, 2664, 4398, 1605, -7349, 8502, 3895, -5901, -8709, -7723, -2125, -1232, -6975, -1962, -1863, 1786, 1431, 74, 7154, -9485, 6022, 2295, -3196, 7555, -9021, -9685, 9592, -8140, 1979, 871, -1348, 8684, 6249, 6319, -6118, 8513, 2057, 9652, -5604, 9867, 1998, -5501, 3081, 7930, 3340, 6863, 1182, 2809, -3923, 8631, -87, -5749, 5003, -4038, 6409, -638, -3476, -6637, 8564, 5155, -3317, 8040, 5049, -1141, -3954, 6636, -7576, 4125, -7222, 8648, 27, -6559, 8119, 1749, 6000, 396, -8599, 6506, -4250, 39, -4475, -59, 9876, 2832, 7889, 2252, -8800, -5950, 9318, -8181, 4870, 2946, -2363, -512, -2579, -692, 1348, -9127, -8659, -6441, 929, 3983, -6759, -5398, -792, -7395, 6501, 4820, 6332, 1896, 8975, 9933, 6899, -7972, 3160, 7609, 5229, 6397, 3207, -9444, -8398, -2617, -1137, 7759, -2622, -8206, 6198, -5610, 727, -857, -6531, -6071, 8636, 3769, -5174, -3407, 825, -6127, -7663, -989, 5359, -9078, 504, 6760, 1958, -4953, 8511, -2972, -1627, 5781, -6252, 9474, 7482, -3517, 2450, -7301, 9933, 8378, 714, 3543, 3371, -8635, 8962, 8028, 8433, -6966, 6054, -6011, -9714, 230, 1863, 7883, -1155, -3434, 5790, 9955, -5706, 2649, -3685, -3709, 7342, -2707, -3874, 5685, 2356, -6487, 483, 4096, -4593, -3328, -9246, -3293, 513, 3485, -5073, 7075, 3279, 8327, -5267, 8019, 6184, 1977, 6995, -9035, -9755, -8462, -671, 1424, 3075, 7244, -3723, -86, 4293, 1428, -768, 831, 5241, -1908, -5672, 1260, 3567, -7705, -2018, -7323, 1430, 8854, 8902, -3015, -4980, -8607, 3808, -2494, -1719, -6054, 9382, -5940, -2232, -232, -6483, 6687, -8150, -4005, 3333, -7842, -7955, -8745, -2445, 2659, -1572, 7111, 6387, -1087, -2407, -9215, 2634, 6470, -5773, -8987, -5408, -8076, -5525, -6803, 434, -6707, -6239, 6005, 4741, -7585, -5724, -2239, -3615, -7278, 8097, 100, -3707, 6750, -7711, -8752, 8947, -7389, -9171, 5670, -6452, -5923, 4670, -7521, 6408, -1800, 6693, -8450, 8931, 5763, -4749, 9934, -5398, -3374, 8868, 934, -4422, 5287, -9761, -2756, -8195, -3860, 179, 9049, -4717, 8129, -5646, -7141, -221, 5498, -4203, -5385, -7672, 3308, -3942, -2865, -3323, 202, 9406, 1702, 3995, -5010, -292, -1075, 386, 5921, 1129, 9854, 1085, -8343, -5889, 7405, 9928, -1850, 5551, -3688, -7717, -701, -9730, -5731, -8813, 2089, 678, 3706, -9413, 3163, -4649, 9971, 2831, -9995, -6207, -8103, -6392, 5673, -2274, -2293, -3113, 6338, -4886, 5079, 5880, -5718, 288, -4489, -7278, 7294, -8345, -1229, 31, 5931, 9540, -7288, -4839, -7820, 6062, -4512, 6054, -4299, 5797, -1642, 900, 9174, 8959, -3903, 5655, 9940, 8807, 5121, -737, -4151, 8622, -4717, 8781, 1188, 1013, -9544, -429, -1036, 1768, -9315, 1124, -6872, -3045, 2673, 3265, -6921, 7739, -9248, -9995, -4932, -7539, 4555, -6779, 6289, 6127, 7349, 9674, -1287, -90, 7894, -2497, -7612, -7715, 8855, -9404, 1334, 5682, -5968, -8619, 3304, -5186, 9066, 6225, -1410, 4617, -737, -333, 3647, 0, -9674, 8474, 2747, -1157, -4300, 4010, 8417, -5567, 1480, 4781, -9414, 7757, -9997, -6105, 6506, -4267, 4392, 5535, -2677, 372, 9973, -5366, -6690, 4448, 7588, 8115, -4501, -7519, 8510, 7326, -8071, -6046, 2516, 8333, 2772, 1162, 5326, -8300, 997, 4863, 6610, -4063, -3407, -8709, 1046, -9501, 1040, 3491, -4244, -5258, 2848, -3290, 4317, -6007, 9941, -7816, 7932, -6938, -2730, -6782, -4190, 9849, -840}));
+        ex.stop();
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 71 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0058_length_of_last_word/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0058_length_of_last_word;
+
+// LINK: https://leetcode.com/problems/length-of-last-word
+
+public class Solution {
+    public int lengthOfLastWord(String s) {
+        String[] arr = s.split(" ");
+        return arr[arr.length - 1].length();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().lengthOfLastWord("Hello, World!"));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 72 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0167_two_sum_ii_input_array_is_sorted/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0167_two_sum_ii_input_array_is_sorted;
+
+// LINK: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted
+
+import java.util.List;
+import java.util.ArrayList;
+
+import helpers.Arrays;
+
+public class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        List<Integer> seen = new ArrayList<Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            if(seen.contains(nums[i])) continue;
+            for (int j = i + 1; j < nums.length; j++)
+                if (nums[i] + nums[j] == target)
+                    return new int[]{i + 1, j + 1};
+            seen.add(nums[i]);
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {2, 7, 11, 15};
+        int target = 9;
+        int[] output = new Solution().twoSum(nums, target);
+        Arrays.display(Arrays.boxArray(output));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 73 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0189_rotate_array/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0189_rotate_array;
+
+// LINK: https://leetcode.com/problems/rotate-array/
+
+public class Solution {
+    public void rotate(int[] nums, int k) {
+        k = k % nums.length;
+        int[] rotatedNums = new int[nums.length];
+        for (int i = 0; i < nums.length; i++)
+            rotatedNums[(i + k) % nums.length] = nums[i];
+        // for (int i = 0; i < nums.length; i++)
+        //     nums[i] = rotatedNums[i];
+        System.arraycopy(rotatedNums, 0, nums, 0, nums.length);
+    }
+
+    public static void main(String[] args) {
+        int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7};
+        new Solution().rotate(nums, 3);
+        for (int n : nums) System.out.print(n + " ");
+        System.out.println();
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 74 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0278_first_bad_version/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0278_first_bad_version;
+
+import helpers.ExecutionTimer;
+import helpers.RandomNumberGenerator;
+
+// LINK: https://leetcode.com/problems/first-bad-version/
+
+public class Solution {
+    private final int firstBad;
+
+    public Solution(int n) {
+        firstBad = RandomNumberGenerator.between(1, n);
+        System.out.println("FIRST BAD VERSION GENERATED: " + firstBad);
+    }
+
+    public boolean isBadVersion(int version) {
+        return version >= firstBad;
+    }
+
+    public int firstBadVersionLinearSolution(int n) {
+        // TIME COMPLEXITY WORST CASE: log(n)
+        for (int i = 1; i <= n; i++)
+            if (isBadVersion(i)) return i;
+        return -1;
+    }
+
+    public int firstBadVersion(int n) {
+        int mid = 1, min = 1, max = n;
+        while (max >= min) {
+            mid = min + (max - min) / 2;
+            boolean isMidBadVersion = isBadVersion(mid);
+            if (isMidBadVersion && !isBadVersion(mid - 1)) return mid;
+            if (isMidBadVersion) max = mid - 1;
+            else min = mid + 1;
+        }
+        return mid;
+    }
+
+    public static void main(String[] args) {
+        int n = 2147483647;
+        Solution solution = new Solution(n);
+
+        ExecutionTimer ex = new ExecutionTimer();
+        System.out.println("FIRST BAD VERSION FOUND: " + solution.firstBadVersionLinearSolution(n));
+        ex.stop();
+
+        ex.start();
+        System.out.println("FIRST BAD VERSION FOUND: " + solution.firstBadVersion(n));
+        ex.stop();
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 75 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0283_move_zeroes/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0283_move_zeroes;
+
+// LINK: https://leetcode.com/problems/move-zeroes
+
+import helpers.Arrays;
+
+public class Solution {
+    public void moveZeroes(int[] nums) {
+        for (int i = 0, zeros = 0; i < nums.length - zeros;)
+            if (nums[i] == 0) {
+                //noinspection ManualArrayCopy
+                for (int j = i; j < nums.length - 1; j++)
+                    nums[j] = nums[j + 1];
+
+                nums[nums.length - 1] = 0;
+                zeros++;
+            } else i++;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = new int[]{0, 1, 0, 3, 12};
+        new Solution().moveZeroes(nums);
+
+        Arrays.display(Arrays.boxArray(nums));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 76 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0344_reverse_string/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0344_reverse_string;
+
+// LINK: https://leetcode.com/problems/reverse-string
+
+import helpers.Arrays;
+
+public class Solution {
+    public void reverseString(char[] s) {
+        for (int i = 0; i < s.length / 2; i++) {
+            char temp = s[i];
+            s[i] = s[s.length - i - 1];
+            s[s.length - i - 1] = temp;
+        }
+    }
+
+    public static void main(String[] args) {
+        char[] arr = new char[]{'h', 'e', 'l', 'l', 'o'};
+        new Solution().reverseString(arr);
+        Arrays.display(Arrays.boxArray(arr));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 77 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0557_reverse_words_in_a_string_iii/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0557_reverse_words_in_a_string_iii;
+
+// LINK: https://leetcode.com/problems/reverse-words-in-a-string-iii
+
+public class Solution {
+    public String reverseString(String s) {
+        char[] charArr = s.toCharArray();
+        //noinspection DuplicatedCode
+        for (int i = 0; i < charArr.length / 2; i++) {
+            char temp = charArr[i];
+            charArr[i] = charArr[charArr.length - i - 1];
+            charArr[charArr.length - i - 1] = temp;
+        }
+        return String.valueOf(charArr);
+    }
+
+    public String reverseWords(String s) {
+        String[] arr = s.split(" ");
+        for (int i = 0; i < arr.length; i++) arr[i] = reverseString(arr[i]);
+        return String.join(" ", arr);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().reverseString("Let's take LeetCode contest."));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 78 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0567_permutation_in_string/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0567_permutation_in_string;
+
+// LINK: https://leetcode.com/problems/permutation-in-string/
+
+// TODO: CORRECT BUT TIME LIMIT EXCEEDED
+public class Solution {
+    /**
+     * @noinspection unused
+     * https://www.programiz.com/dsa/bubble-sort
+     */
+    public void bubbleSort(char[] arr) {
+        int size = arr.length;
+        for (int i = 0; i < size - 1; i++)
+            for (int j = 0; j < size - i - 1; j++)
+                if (arr[j] > arr[j + 1]) {
+                    char temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+    }
+
+    // https://www.programiz.com/dsa/merge-sort
+    void merge(char[] arr, int p, int q, int r) {
+        int n1 = q - p + 1;
+        int n2 = r - q;
+
+        char[] L = new char[n1];
+        char[] M = new char[n2];
+
+        //noinspection ManualArrayCopy
+        for (int i = 0; i < n1; i++)
+            L[i] = arr[p + i];
+        for (int j = 0; j < n2; j++)
+            M[j] = arr[q + 1 + j];
+
+        int i = 0, j = 0, k = p;
+
+        while (i < n1 && j < n2) {
+            if (L[i] <= M[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = M[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = M[j];
+            j++;
+            k++;
+        }
+    }
+
+    void mergeSort(char[] arr, int l, int r) {
+        if (l < r) {
+            int m = (l + r) / 2;
+            mergeSort(arr, l, m);
+            mergeSort(arr, m + 1, r);
+            merge(arr, l, m, r);
+        }
+    }
+
+    void mergeSort(char[] arr) {
+        mergeSort(arr, 0, arr.length - 1);
+    }
+
+    public boolean checkInclusion(String s1, String s2) {
+        char[] s1Arr = s1.toCharArray();
+        mergeSort(s1Arr);
+        s1 = String.valueOf(s1Arr);
+
+        for (int i = 0; i < s2.length() - s1.length() + 1; i++) {
+            char[] s2Arr = s2.substring(i, i + s1.length()).toCharArray();
+            mergeSort(s2Arr);
+            String tempS2 = String.valueOf(s2Arr);
+            if (s1.equals(tempS2)) return true;
+        }
+
+        return false;
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 79 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0704_binary_search/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0704_binary_search;
+
+// LINK: https://leetcode.com/problems/binary-search/
+
+public class Solution {
+    // LINEAR SEARCH ALGORITHM, TIME COMPLEXITY WORST CASE: O(n)
+    // public int search(int[] nums, int target) {
+    //     for (int i = 0; i < nums.length; i++)
+    //         if (target == nums[i]) return i;
+    //     return -1;
+    // }
+
+    // BINARY SEARCH ALGORITHM, ITERATIVE SOLUTION, TIME COMPLEXITY WORST CASE: O(log n)
+    public int search(int[] nums, int target) {
+        int min = 0, max = nums.length - 1;
+        while (max > min) {
+            int mid = min + (max - min) / 2; // OR: int mid = (min + max) / 2;
+            if (target == nums[mid]) return mid;
+            else if (target < nums[mid]) max = mid - 1;
+            else min = mid + 1;
+        }
+        return -1;
+    }
+
+    // BINARY SEARCH ALGORITHM, RECURSIVE SOLUTION, TIME COMPLEXITY WORST CASE: O(log n)
+    public int searchRec(int[] nums, int target, int min, int max) {
+        if (min >= max) return -1;
+        int mid = min + (max - min) / 2;
+        if (target == nums[mid]) return mid;
+        if (target < nums[mid]) return searchRec(nums, target, min, mid - 1);
+        else return searchRec(nums, target, mid + 1, max);
+    }
+
+    public static void main(String[] args) {
+        int[] nums = new int[]{-1, 0, 3, 5, 9, 12};
+        int target = 9, min = 0, max = nums.length - 1;
+        System.out.println(new Solution().search(nums, target));
+        System.out.println(new Solution().searchRec(nums, target, min, max));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 80 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0876_middle_of_the_linked_list/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0876_middle_of_the_linked_list;
+
+// LINK: https://leetcode.com/problems/middle-of-the-linked-list
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+        this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+/**
+ * @noinspection DuplicatedCode
+ */
+public class Solution {
+    public ListNode middleNode(ListNode head) {
+        int length = 0;
+        ListNode ln = head;
+
+        while (ln != null) {
+            length++;
+            ln = ln.next;
+        }
+
+        int middle = length / 2;
+        ln = head;
+
+        for (int i = 0; i < middle; i++) ln = ln.next;
+        return ln;
+    }
+
+    public ListNode getInitialHead() {
+        ListNode ln, head;
+
+        ln = new ListNode(1);
+        head = ln;
+
+        ln.next = new ListNode(2);
+        ln = ln.next;
+
+        ln.next = new ListNode(3);
+        ln = ln.next;
+
+        ln.next = new ListNode(4);
+        ln = ln.next;
+
+        ln.next = new ListNode(5);
+        return head;
+    }
+
+    public void displayListNode(ListNode ln) {
+        while (ln != null) {
+            System.out.print(ln.val + " ");
+            ln = ln.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        ListNode head = solution.getInitialHead();
+        solution.displayListNode(solution.middleNode(head));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 81 ---
+File: Solution.java
+Path: Old/src/solutions/problem_0977_squares_of_a_sorted_array/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0977_squares_of_a_sorted_array;
+
+// LINK: https://leetcode.com/problems/squares-of-a-sorted-array/
+
+public class Solution {
+    public void bubbleSort(int[] array) {
+        int size = array.length;
+        for (int i = 0; i < size - 1; i++)
+            for (int j = 0; j < size - i - 1; j++)
+                if (array[j] > array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+    }
+
+    public int[] sortedSquares(int[] nums) {
+        for (int i = 0; i < nums.length; i++)
+            nums[i] = nums[i] * nums[i];
+        this.bubbleSort(nums);
+        return nums;
+    }
+
+    public static void main(String[] args) {
+        for (int n : new Solution().sortedSquares(new int[]{-4, -1, 0, 3, 10}))
+            System.out.print(n + " ");
+        System.out.println();
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 82 ---
+File: PackageNameGeneratorTest.java
+Path: Old/test/helpers/PackageNameGeneratorTest.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Packagenamegeneratortest
+
+Code:
+package helpers;
+
+// ANNOTATIONS: https://devqa.io/junit-5-annotations/
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("Testing PackageNameGenerator Class")
+class PackageNameGeneratorTest {
+
+    @Test()
+    @DisplayName("Testing fromProblemName Method")
+    void fromProblemName() {
+        String problemName = "19. Remove Nth Node From End of List";
+        String packageName = "problem_0019_remove_nth_node_from_end_of_list";
+        assertEquals(
+                packageName,
+                PackageNameGenerator.fromProblemName(problemName)
+        );
+    }
+}
+--------------------------------------------------
+
+--- Solution 83 ---
+File: RandomNumberGeneratorTest.java
+Path: Old/test/helpers/RandomNumberGeneratorTest.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Randomnumbergeneratortest
+
+Code:
+package helpers;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RandomNumberGeneratorTest {
+    @Test()
+    void between() {
+        int rand = RandomNumberGenerator.between(1, 5);
+        assertTrue(rand >= 1 && rand <= 5);
+    }
+}
+--------------------------------------------------
+
+--- Solution 84 ---
+File: StringsTest.java
+Path: Old/test/helpers/StringsTest.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Stringstest
+
+Code:
+package helpers;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class StringsTest {
+    @Test()
+    void padLeftZeros() {
+        assertEquals("0000", Strings.padLeftZeros("", 4));
+        assertEquals("0012", Strings.padLeftZeros("12", 4));
+        assertEquals("12345", Strings.padLeftZeros("12345", 4));
+    }
+}
+--------------------------------------------------
+
+--- Solution 85 ---
+File: Solution.java
+Path: Old/test/solutions/problem_0003_longest_substring_without_repeating_characters/Solution.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solution
+
+Code:
+package solutions.problem_0003_longest_substring_without_repeating_characters;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class SolutionTest {
+    @Test
+    void lengthOfLongestSubstring() {
+        Solution solution = new Solution();
+        assertEquals(3, solution.lengthOfLongestSubstring("abcabcbb"));
+        assertEquals(1, solution.lengthOfLongestSubstring("bbbb"));
+        assertEquals(3, solution.lengthOfLongestSubstring("pwwkew"));
+    }
+}
+
+--------------------------------------------------
+
+--- Solution 86 ---
+File: SolutionTest.java
+Path: Old/test/solutions/problem_0019_remove_nth_node_from_end_of_list/SolutionTest.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solutiontest
+
+Code:
+package solutions.problem_0019_remove_nth_node_from_end_of_list;
+
+// LINK: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class SolutionTest {
+    @Test
+    void removeNthFromEnd() {
+        Solution solution = new Solution();
+
+        ListNode head = solution.getInitialHead(); // [1, 2, 3, 4, 5]
+        assertEquals(solution.getLength(solution.removeNthFromEnd(head, 0)), 5);
+
+        head = solution.getInitialHead();
+        assertEquals(solution.getLength(solution.removeNthFromEnd(head, 1)), 4);
+
+        head = solution.getInitialHead();
+        assertEquals(solution.getLength(solution.removeNthFromEnd(head, 3)), 4);
+
+        head = solution.getInitialHead();
+        assertEquals(solution.getLength(solution.removeNthFromEnd(head, 5)), 4);
+
+        head = solution.getInitialHead();
+        assertEquals(solution.getLength(solution.removeNthFromEnd(head, 6)), 5);
+    }
+}
+--------------------------------------------------
+
+--- Solution 87 ---
+File: SolutionTest.java
+Path: Old/test/solutions/problem_0567_permutation_in_string/SolutionTest.java
+Language: Java
+Extracted Number: Unknown
+Extracted Title: Solutiontest
+
+Code:
+package solutions.problem_0567_permutation_in_string;
+
+import helpers.ExecutionTimer;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SolutionTest {
+    @Test
+    void checkInclusion() {
+        Solution solution = new Solution();
+        assertTrue(solution.checkInclusion("ab", "eidbaooo"));
+        assertFalse(solution.checkInclusion("ab", "eidboaoo"));
+
+        ExecutionTimer ex = new ExecutionTimer(ExecutionTimer.In.MILLI_SECONS);
+        assertTrue(solution.checkInclusion(
+                "jqowgtqdokaxwlqdhfvyxnaflcxinzmwptndasfcllrucjvixufbcdrwcxbjmvwmjzjcqnugddugkaqbirmthedbfidisueqruimmvetezyzjvyqzucdlrlicqldmtsrluhphqrwejqbcgafhqxfxceibvshmvdjubdinoeqlitgnhvjvbqwcvdhncxognwoaeyojayyrzbokaxsihhkzbkvaczlmepzhlwnyzdzborlwbhicmdyieiwarxwpzgukknkplhmkciolicttdsbesbkysnpwhhqmpdctfqyawxxbrjmgbefhuajwedaingmrwfdptobbkfxgupczsahmxngmupbolysndbgswzlxldjynxrooiszcfyhixupcgudalteszwwkrhipqmxckzxydftkoxsmemggcedizgqihcjnbnjaduhucwoxarpachkqmnhafddyhaoqkeskodukkgnnejjskykgwfnoyspcjgvnbjmxdnpvxjbwqkokzchcvddbuzgtbackxevisusequrqwrsmeqbffcfzzzdqvreeydfygkmkzftzgbkjznqqdpzanpojqhrrghmnmmjsgxnozjnieuffbsvtxzizwhhtcrszyjwlmbxklakzhymzvpuuywpqksiuifkshzsdsnsgdbpmgvinihwykzzpoojukgltdcvncerrmxkrnqrmslchvlarghbnqgdtyfrwsuhhodymsrpxgqptjlvhmlcazvvybuljbpaqqqqdcufkqgcknrlrwzbdtqqykdwrqputjxortexovmtpmeyogxxcykxpbknbrjvwgfdrjmrwxutbwzcialjnbokhddaonxfoqaxarkzslcwqorlhdpsbryswboxftjjbmvlvstzfgmvvltbziyflrddkyxslifvcunyxrmbhadolsebrumwcjlkzfpncweynspxpftcbahdwjlmaxyvigxubjgoimyqtxqiajidfmajgpkqpcznuafehnkznydfxuvfucngrxksggapliibymejxzcmbdrfbzdjxyzblphmkhqluqtviuzixhgwqqueeckurttbsssykhsexmqqtfeicpjckvsgrmcwayjpshkltnqapjbbhhihlalzeuddrmodkeofemhzgqwiyoygpajbqpscuzpzsprkyobbtypegbqbnodpiuwptxgvmizxcgcocqymcranquqnwggwjbcskwjvvnpfmhaohrhuzmfgskufilqstxinwdockopciyuaaeoqdappvlfzklqlpjrkaeigtlfvjcfuxlazrxnqupcnlkyqwfkyhpvnirltoxrckanedkezyekbiolscaqltwxpoybxrspmamjmdmjfflxeokelpsavsdvhqqbwtopsfkijdzsygkoinqwhufwnbgauiprsitlapkllaipwbdbzettoxmfddynxhrujwcouxgtrjemrxmceaatfxomyqyqjpiwducxpuyailvgiuxrzoonydokcymdgqzbuanzdxufcftqremdcrbyspoylvcqvyoyxhsbvlpamysyqltiwnsicvatgmztrmicpsedldlhylellpmqvhymryfhkbkdytdqlonsuzyqsimlsfxbdffpcziviwxfiraaoepadarqpldxecydtcogbpnuugbendyvxgpybhqzwgussybomxzdmmrvysqimxxyjqrvjwjjivwywdqmsgkgdzhpaahpanxkzqbhtjqdgjcybnufpwutuafdzegslokejhfwrrdmlyitegckpzyipmyhsdpukrgbduoifxqikvlahjkicjhtofiufnjdanzhtomtxswwcljezreipjlpkzmpkisklxanpdzzetfzecdjinacsuilnejspdqihzlbshvqfnycfwgcgzbmmpiwrwtrpnmkiegdahhttlqvxqbnqpbqyxkaslgxvwsyjyuahenadpmfinwdzcudgkjfwkahjs",
+                "deasvrgsdxhdbemwpenmbhjbnykuygxvmfkjagxnjoywjdgmjewtofmbpfehbfgauiihajsdbarllcmoqkqvebwvtitjqscqnantzpqtifwvmzlnkyuxoruhqlvvoqqdwzccprqmsrllrzfyvqgiyrbqlmskrqjdfdvygtsmijcqdhmpuqhrmsrwzsnnxpynjtechsxvlwhurtqbieshuragietmcokwxrlvehihspodjkkpweqekrjemnsimexuktmoqiowiyifqjsylmmejuhltwjfqfyyujuwdivyzctvrkefdzpwqrzpembtrcamzubewkanmgnmfjyatgnkxtmimnqsodgvnbkowvjebslcfdrqjkpjhfqojwtdfunhctckgipwgmtlzialllhcnarbbrtxgzddmryuohmjtsnpkkpvtipqjkucuqnqgdvvsquedghikbayosxjfwrvlnjpukbxhzruatdiwemwjnjpkwancvdniwiefcstdgyhycntmgroneylurnehnhjqjqomcgcwprwdoejlvaponqhyaultpxqvykydofkpurzqhygxmieyjotxhiqtvlnmffxurxhmrhvdkkgwaekojxocoofvznjynlzhbojbkljzhihfepmhuirqxsxjslbaoilykltzpqzjzvoqenjuayqmktpsoedxnwwibotpjgpmpfsnbipuammzlaogvekhzftqxrbmiwuhynpaznoqsxfiuacwogolvqvzbqlmunaemsvhlmtkavbzvhdignnhdziydpqaizjlytqjrhgtbdaxmgepysvtnampnldgpgtrbhtzhfbvclwustztaerkzggiekheckfquleawilaexocaggnxeygovsfzkjkeizfkfcffdrgzcftjlaluooqkgceoahlhwvfmwwkgqiqxstlzahtyzicnyboeqstdskkidqcseyrjfsucvyefbkikfjzesdpoxkhstiapcidwxaantpxzjxuipkzcrybgftemljmdaeisvfrnlrzlbbxukiggchmpriytsdqlzbjsgrfffwiwdupgjkudtemkncffcxxdeqepqcbmcfurwbjhsyvjxlzittwsodkgnfsklbzdclcsireusuzfraqmjrhbtyrnogsfllnjbxwicpsshhgiqgdnlvzybzdkgpngyylznhxaktgmiriqrfsigowybnrdfhwbknjpwqwrvcmvxpfqpburfglokymmwjshsjrdzlcxzmpwefyqwgjvvjlejhpcfvdfnlbyuvwdsoihailxypsoswpfauxdbaqukclmqikmimiryeptmygvkvmcjkkswthokvksoibotyrsprajrjucvukekiuyjnydiwaqpelrxadrhruhqoxhowbabtfwaxlvqbzpghijvbkxqqgmdksecjymvtrqqgycvmqjbdypphvfkhrfbnkxyyxkguxpdjvndwpihdtlvarfxveltnvmmdufihhqttmbpoyzwhieoblwjaoxbhmvmbklpuprlvqthmdskyixgcspiawdeoopxhzpsdtxsfjzrkdvnbtmbehjqowgtqdokaxwlqdhfvyxnaflcxinzmwptndasfclnrucjvixufbcdrwcxbjmvwmjzjcqnhgddugkaqqirmthedbfidisueqruimmvetezyzjvyqzucdlrlfaqldmtsrluhphqrwejqbcgafhqxfxceibvshmvdjubdinoeqlitgnhvjvbqwcvdhncxognwoaeyojayyrzmokpxsihhkzbkvaczlmepzhlwnyzdzborlwbhicmduieiwarxwpzgukknkplhmkcioficttdsbesbkysnpwhhqmpdctfqyawxxbrjmgbefhuajwedaingmrwfdptobbkfxgupczsahmxngmupbolysndbgswzlxldjynxrooiszcfyhixupcgudalteszwwkrhipqmxckzxydftkoxsmemggcxhizgqihcjnbnjaduhucwoxarpachkqmnhafddyhaoqkeskodukkgnnejjskykgwfnoyspcjgvnbjmxdnpvxjbwqkokzchcvddbuzgtbackxevisusequrqwrsmeqbffcfzzzdqvreeydfygkmkzftzgbkjznqqdpzanpojqhrrghmnmmjsgxnozjnieuffbsvtxzizwhhtcrszyjwlmbxklakzhymzvpuuywpqksauifkshzsdsnsgdbpmgvinihwykzzpoojukgltdcvncerrmxkrnqrmslchvlarghbnqgdtyfrwsuhhodymsrpxgqptjlvhmlcazvvybuljbpaqqqqdculkqgckdrlrwzbdtqqykdwrqputjxortexovmtpmeyogxxcykxpbknbrjvwgfdrjmrwxutbwzcijnjnbokhddaonxfoqaxarkzslcwqorlhdvsbryswboxftjjbmvlvstzfgmvvltbziyflrddkyxslifvcunyxrmbradolsebrumwcjlkzfpncweynspxpftcbahdwjlmaxyvigxubjgoimyqtxqiajidfmajgpkqpcznuafetnkznydfxuvfucngrxksggapliibymejxzcmbdrfbzdjxyzblphmkhqlubtviuzixhgwqqueeckurttbsssykhsexmqqtfeicpjckvsgrbcwayjpshkltnqapjbbhhinlalzeuddrmodkeofemhzgqweyoygpajbqpscuzpzsprkyobbtypegbqbnodpiuwptxgvmizxcgcocqymcranquqnwggwjbcskwjvvnpfmhaohhhuzmfgskufilqstxinwdockopciyuaaeoqdappvlfzklqlpjrkaeigdlfvjcfuxlazrxnqupcnlkyqwfkyhpvnirltoxrckanedkezyekbiolscaqltwxpoybxrspmamjmdmafflxeokelpsavsdvhqqbwtopsfkijdzsygkoihqwhyfwnbgauiprsitlapkllaipwbdbzettoxmfddynxhrujwcouxgtrjemrxmciaatfxomyqyqjpiwducepuyailvgiuxrzoonydokcymdgqzbuanzdxufcftqremdcrbyspoylvcqvyoyxhsbvlpamysyqltiwnsicvatgmztrmicpsedldlhylellpmqvhymryfhkbkdytdqlonsuzyqsimlsfxbdffpcziviwxfiraaoepadarqpldxecydtcogbpnuugbendyvxgpybhqzwgussybomxzdmmrvysqimxxyjqrpjwjjivwywdqmsgkgdzhpaahpalxkzqbhtjqdgjcybnufpwutuafdzegslokejhfwrrdmlyitegckpzyipmyhsdpukrgbduoiixqikvlahjkicjutofiufnjdanzhtomtxswwcljezreipjlpkzmpkisklxanidzzetfzecljinacsuilnejspdqihzlbshvqfnycfwgcgzbmmpiwrwtrpnmkiegdchhttlqvxqbnqpbqyxkaslgxvwsyjyuahenadpmfinwdzcudgkjfwkahjsyerluvhlmudkshnvhqygjxpfvblelciwbkiflnutrihyffamtmtnklexvvelsoyjypppvflbeoxorlfmhryxcvyeypxdtailsnfiuqapwhrovfrhkeqpzeysxhqyjpihbdnqpshyemgpxcnscfzgydmemuffryevsjxdcbynebxnhvfwpnhmmxzubjkmqkecmoqtugbxdwowcawjmqlmwjlwmaxftpdnprgxekkusmzuythqmqtacbyepvoickldankkssjyfpxqmabqorvtpgztuqyjgqjhmzmqnuyrfgjkrgoimnbhkzhoefscczbejgkjtztwwcsmalbezdtxihbyimigmotxuftbszrnquyvuxacdrwnzmstkxujwjcmmqmbennupqzvjgxgyrbttudkpprljznpjhadlavgzisehircbdnxmltfsmbffppszjtekdfeagpquf"
+        ));
+        ex.stop(); // 4529 MIILISECONDS USING BUBBLE SORT, 274 MIILISECONDS USING MERGE SORT
+    }
+}
+--------------------------------------------------
